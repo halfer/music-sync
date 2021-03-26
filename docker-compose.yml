@@ -1,0 +1,9 @@
+version: "3.0"
+
+services:
+  music-sync:
+    build:
+      context: .
+    volumes:
+      - .:/project
+    tty: true
