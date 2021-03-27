@@ -3,3 +3,6 @@
 
 # Ignore dependencies
 vendor/
+
+# Ignore test temporary artifacts
+tests/tmp/
