@@ -7,23 +7,27 @@ use RuntimeException;
 abstract class FsObject
 {
     protected string $name;
-    protected ?Directory $parent = null;
+    protected ?string $path = null;
 
-    public function __construct(string $name, Directory $parent = null)
+    public function __construct(string $name)
     {
-        // Throw an exception if there is a separator in the name
-        if (str_contains($name, DIRECTORY_SEPARATOR)) {
-            throw new RuntimeException(
-                'FsObject names cannot contain directory separators'
-            );
+        // Split a name into path/name components
+        $lastSlash = strrpos($name, DIRECTORY_SEPARATOR);
+        if ($lastSlash !== false) {
+            $this->path = substr($name, 0, $lastSlash);
+            $name = substr($name, $lastSlash + 1);
         }
 
         $this->name = $name;
-        $this->parent = $parent;
     }
 
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getPath(): ?string
+    {
+        return $this->path;
     }
 }

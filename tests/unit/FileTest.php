@@ -2,21 +2,40 @@
 
 namespace MusicSync\Test\Unit;
 
+use MusicSync\Service\FileOperation\Directory;
 use PHPUnit\Framework\TestCase;
 use MusicSync\Service\FileOperation\File;
 use Exception;
 
 class FileTest extends TestCase
 {
-    public function testFileCannotContainPath()
+    public function testFileWithPath()
     {
-        $fails = false;
+        $file = new File(DIRECTORY_SEPARATOR . 'a' . DIRECTORY_SEPARATOR . 'b');
+        $this->assertEquals('b', $file->getName(), 'Check file');
+        $this->assertEquals(DIRECTORY_SEPARATOR . 'a', $file->getPath(), 'Check path');
+    }
+
+    public function testFileWithNoPath()
+    {
+        $file = new File('a');
+        $this->assertEquals('a', $file->getName());
+        $this->assertNull($file->getPath());
+    }
+
+    /**
+     * Files with trailing directory separators are not allowed
+     */
+    public function testFileWithTrailingSeparator()
+    {
         try {
-            $file = new File('a' . DIRECTORY_SEPARATOR . 'b');
+            $file = new File(DIRECTORY_SEPARATOR . 'a' . DIRECTORY_SEPARATOR);
+            $failed = false;
         }
-        catch (Exception $e) {
-            $fails = true;
+        catch (\Exception $e) {
+            $failed = true;
         }
-        $this->assertTrue($fails);
+
+        $this->assertTrue($failed);
     }
 }
