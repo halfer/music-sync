@@ -27,12 +27,9 @@ class Directory extends FsObject
 
     public function recursivePopulate()
     {
-        foreach ($this->contents as $fsObject) {
+        foreach ($this->getContents() as $fsObject) {
             if ($fsObject instanceof Directory) {
-                $path = $fsObject->getPath() .
-                    DIRECTORY_SEPARATOR .
-                    $fsObject->getName();
-                $fsObject->glob($path);
+                $fsObject->glob();
                 $fsObject->recursivePopulate();
             }
         }

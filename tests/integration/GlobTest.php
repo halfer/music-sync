@@ -46,8 +46,16 @@ class GlobTest extends TestCase
         $dir->recursivePopulate();
 
         // Test result
-        $contents = $this->exploreDirectory($dir);
-        #print_r($contents);
+        $innerContents = [['name' => 'a', ], ['name' => 'b', ], ['name' => 'c', ], ];
+        $this->assertEquals(
+            $this->exploreDirectory($dir),
+            [
+                ['name' => '1', 'contents' => $innerContents, ],
+                ['name' => '2', 'contents' => $innerContents, ],
+                ['name' => '3', 'contents' => $innerContents, ],
+                ['name' => '4', 'contents' => $innerContents, ],
+            ]
+        );
     }
 
     /**
