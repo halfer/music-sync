@@ -2,6 +2,6 @@
 
 namespace MusicSync\Service\FileOperation;
 
-class File
+class File extends FsObject
 {
 }
