@@ -2,6 +2,8 @@
 
 namespace MusicSync\Service\FileOperation;
 
+use RuntimeException;
+
 class Directory extends FsObject
 {
     protected array $contents = [];
@@ -47,6 +49,10 @@ class Directory extends FsObject
 
     public function getContents()
     {
+        if (!$this->populated) {
+            throw new RuntimeException('Cannot get contents before population');
+        }
+
         return $this->contents;
     }
 
