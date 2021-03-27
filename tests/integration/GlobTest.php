@@ -9,13 +9,19 @@ class GlobTest extends TestCase
 {
     public function testNonRecursiveGlob()
     {
+        // Set up some files to scan
+        $expectedFiles = ['a', 'b', ];
         $tmp = $this->getTempDir('testNonRecursiveGlob');
-        touch($tmp . '/a');
-        touch($tmp . '/b');
+        $this->touchFiles($tmp, $expectedFiles);
+
         $dir = new Directory($tmp);
         $dir->glob('*');
-        print_r($dir->getContents());
-        $this->markTestIncomplete();
+
+        $actualFiles = [];
+        foreach ($dir->getContents() as $content) {
+            $actualFiles[] = $content->getName();
+        }
+        $this->assertEquals($expectedFiles, $actualFiles);
     }
 
     public function testRecursiveGlob()
@@ -30,5 +36,12 @@ class GlobTest extends TestCase
         @mkdir($tmp, 0777, true);
 
         return $tmp;
+    }
+
+    protected function touchFiles(string $parent, array $files)
+    {
+        foreach ($files as $file) {
+            touch($parent . DIRECTORY_SEPARATOR . $file);
+        }
     }
 }
