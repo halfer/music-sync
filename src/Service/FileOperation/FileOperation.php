@@ -1,6 +1,6 @@
 <?php
 
-namespace MusicSync\Command;
+namespace MusicSync\Service\FileOperation;
 
 class FileOperation
 {
