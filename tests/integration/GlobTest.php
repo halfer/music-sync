@@ -7,13 +7,20 @@ use PHPUnit\Framework\TestCase;
 
 class GlobTest extends TestCase
 {
+    public function setUp(): void
+    {
+        $tmpDir = $this->getTempDir();
+        exec(" rm -rf $tmpDir/*");
+    }
+
     public function testNonRecursiveGlob()
     {
-        // Set up some files to scan
+        // Set up files + folders
         $expectedFiles = ['a', 'b', ];
-        $tmp = $this->getTempDir('testNonRecursiveGlob');
-        $this->touchFiles($tmp, $expectedFiles);
+        $tmp = $this->getNewTempDir('testNonRecursiveGlob');
+        $this->createDemoFiles([$tmp], $expectedFiles);
 
+        // Run the operation
         $dir = new Directory($tmp);
         $dir->glob('*');
 
@@ -26,13 +33,66 @@ class GlobTest extends TestCase
 
     public function testRecursiveGlob()
     {
-        $this->markTestIncomplete();
+        // Set up files + folders
+        $expectedFiles = ['a', 'b', 'c'];
+        $this->createDemoFiles(
+            $this->createDemoFolders('testRecursiveGlob', ['1', '2', '3', '4',]),
+            $expectedFiles
+        );
+
+        // Run the operation
+        $dir = new Directory($this->getNewTempDir('testRecursiveGlob'));
+        $dir->glob();
+        $dir->recursivePopulate();
+
+        // Test result
+        $contents = $this->exploreDirectory($dir);
+        #print_r($contents);
     }
 
-    protected function getTempDir($name)
+    /**
+     * This does not work
+     */
+    protected function exploreDirectory(Directory $dir) {
+        $list = [];
+        foreach ($dir->getContents() as $item) {
+            $entry = ['name' => $item->getName(), ];
+            if ($item instanceof Directory) {
+                $entry['contents'] = $this->exploreDirectory($item);
+            }
+            $list[] = $entry;
+        }
+
+        return $list;
+    }
+
+    protected function createDemoFolders($parent, array $names)
     {
-        $testRoot = realpath(__DIR__ . '/..');
-        $tmp = $testRoot . '/tmp/' . $name;
+        $tmps = [];
+        foreach ($names as $name) {
+            $tmps[] = $this->getNewTempDir($parent . DIRECTORY_SEPARATOR . $name);
+        }
+
+        return $tmps;
+    }
+
+    protected function createDemoFiles(array $tmps, array $expectedFiles)
+    {
+        foreach ($tmps as $tmp) {
+            $this->touchFiles($tmp, $expectedFiles);
+        }
+    }
+
+    protected function getTempDir()
+    {
+        $testRoot = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..');
+
+        return $testRoot . DIRECTORY_SEPARATOR . 'tmp';
+    }
+
+    protected function getNewTempDir($name)
+    {
+        $tmp = $this->getTempDir() . DIRECTORY_SEPARATOR . $name;
         @mkdir($tmp, 0777, true);
 
         return $tmp;
