@@ -10,7 +10,13 @@ class Directory extends FsObject
     public function glob(string $pattern = '*')
     {
         $this->clearContents();
-        foreach (glob($this->getPath() . '/' . $pattern) as $path)
+        $path = $this->getPath() .
+            DIRECTORY_SEPARATOR .
+            $this->getName() .
+            DIRECTORY_SEPARATOR .
+            $pattern;
+
+        foreach (glob($path) as $path)
         {
             $this->pushObject($path);
         }
@@ -39,6 +45,11 @@ class Directory extends FsObject
         }
     }
 
+    public function getContents()
+    {
+        return $this->contents;
+    }
+
     protected function clearContents()
     {
         $this->contents = [];
@@ -48,15 +59,5 @@ class Directory extends FsObject
     protected function setPopulated()
     {
         $this->populated = true;
-    }
-
-
-    public function setPath(string $path)
-    {
-
-    }
-
-    protected function getPath(): string
-    {
     }
 }

@@ -2,7 +2,6 @@
 
 namespace MusicSync\Test\Unit;
 
-use MusicSync\Service\FileOperation\Directory;
 use PHPUnit\Framework\TestCase;
 use MusicSync\Service\FileOperation\File;
 use Exception;
@@ -32,7 +31,7 @@ class FileTest extends TestCase
             $file = new File(DIRECTORY_SEPARATOR . 'a' . DIRECTORY_SEPARATOR);
             $failed = false;
         }
-        catch (\Exception $e) {
+        catch (Exception $e) {
             $failed = true;
         }
 
