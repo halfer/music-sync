@@ -6,6 +6,9 @@ use RuntimeException;
 
 class Directory extends FsObject
 {
+    const POPULATE_OPTION_CONTENTS = 'contents';
+    const POPULATE_OPTION_SIZE = 'size';
+
     protected array $contents = [];
     protected bool $populated = false;
 
@@ -25,12 +28,24 @@ class Directory extends FsObject
         $this->setPopulated();
     }
 
-    public function recursivePopulate()
+    public function recursivePopulate(array $options = [])
     {
+        // Defaults to true
+        $popContents = isset($options[self::POPULATE_OPTION_CONTENTS]) ?
+            (bool) $options[self::POPULATE_OPTION_CONTENTS] :
+            true;
+        // Defaults to false
+        $popSize = isset($options[self::POPULATE_OPTION_SIZE]) ?
+            (bool) $options[self::POPULATE_OPTION_SIZE] :
+            false;
+
         foreach ($this->getContents() as $fsObject) {
-            if ($fsObject instanceof Directory) {
+            if ($popContents && $fsObject instanceof Directory) {
                 $fsObject->glob();
                 $fsObject->recursivePopulate();
+            }
+            if ($popSize && $fsObject instanceof File) {
+                $fsObject->populateSize();
             }
         }
     }

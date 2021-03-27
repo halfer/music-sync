@@ -19,6 +19,13 @@ class File extends FsObject
         parent::__construct($name);
     }
 
+    public function populateSize()
+    {
+        $this->setSize(
+            filesize($this->getPath() . DIRECTORY_SEPARATOR . $this->getName())
+        );
+    }
+
     public function setSize(int $size)
     {
         $this->size = $size;
