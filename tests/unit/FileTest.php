@@ -37,4 +37,19 @@ class FileTest extends TestCase
 
         $this->assertTrue($failed);
     }
+
+    public function testCannotFetchSizeIfItIsNotPopulated()
+    {
+        try {
+            $failed = false;
+            $file = new File('a');
+            $file->getSize();
+        }
+        catch (\Exception $e) {
+            $failed = true;
+        }
+
+        // The call needs to fail for this test to pass
+        $this->assertTrue($failed);
+    }
 }
