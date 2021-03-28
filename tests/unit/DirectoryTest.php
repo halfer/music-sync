@@ -95,6 +95,33 @@ class DirectoryTest extends TestCase
         );
     }
 
+    /**
+     * No need to have a descending recursive test also, I think
+     */
+    public function testRecursiveSortBySizeAscending()
+    {
+        // Creates a nested structure
+        $dir = $this->createDemoDirForSizes();
+        $dir->pushObjectPublic($this->createDemoDirForSizes());
+
+        $dir->recursiveSort(Directory::SORT_SIZE);
+        $this->assertEquals(
+            $this->exploreDirectory($dir),
+            [
+                ['name' => 'home', 'contents' => [
+                    ['name' => 'd', 'size' => 15, ],
+                    ['name' => 'b', 'size' => 25, ],
+                    ['name' => 'a', 'size' => 50, ],
+                    ['name' => 'c', 'size' => 75, ],
+                ]],
+                ['name' => 'd', 'size' => 15, ],
+                ['name' => 'b', 'size' => 25, ],
+                ['name' => 'a', 'size' => 50, ],
+                ['name' => 'c', 'size' => 75, ],
+            ]
+        );
+    }
+
     protected function createDemoDirForSizes()
     {
         $dir = new DirectoryTestHarness('home');
@@ -109,14 +136,6 @@ class DirectoryTest extends TestCase
         }
 
         return $dir;
-    }
-
-    /**
-     * No need to have a descending recursive test also, I think
-     */
-    public function testRecursiveSortBySizeAscending()
-    {
-        $this->markTestIncomplete();
     }
 
     protected function getFilenameList(Directory $dir)

@@ -121,7 +121,11 @@ class Directory extends FsObject
     {
         list($aSwapped, $bSwapped) = $this->getSwappedSortObjects($a, $b);
 
-        return $aSwapped->getSize() <=> $bSwapped->getSize();
+        // Remember that directories don't have sizes
+        $aSize = $aSwapped instanceof File ? $aSwapped->getSize() : 0;
+        $bSize = $bSwapped instanceof File ? $bSwapped->getSize() : 0;
+
+        return $aSize <=> $bSize;
     }
 
     /**
