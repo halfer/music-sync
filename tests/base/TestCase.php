@@ -10,7 +10,7 @@ class TestCase extends BaseTestCase
     /**
      * Produces an array representation of a nested class structure (for testing)
      */
-    protected function exploreDirectory(Directory $dir) {
+    protected function exploreDirectory(Directory $dir): array {
         $list = [];
         foreach ($dir->getContents() as $item) {
             $entry = ['name' => $item->getName(), ];
