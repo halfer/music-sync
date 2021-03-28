@@ -4,7 +4,6 @@ namespace MusicSync\Test\Integration;
 
 use MusicSync\Test\TestCase;
 use MusicSync\Service\FileOperation\Directory;
-use MusicSync\Service\FileOperation\File;
 
 class GlobTest extends TestCase
 {
@@ -87,25 +86,6 @@ class GlobTest extends TestCase
             $this->createDemoFolders($parent, ['1', '2', '3', '4',]),
             $expectedFiles
         );
-    }
-
-    /**
-     * This does not work
-     */
-    protected function exploreDirectory(Directory $dir) {
-        $list = [];
-        foreach ($dir->getContents() as $item) {
-            $entry = ['name' => $item->getName(), ];
-            if ($item instanceof Directory) {
-                $entry['contents'] = $this->exploreDirectory($item);
-            }
-            if ($item instanceof File && $item->hasSize()) {
-                $entry['size'] = $item->getSize();
-            }
-            $list[] = $entry;
-        }
-
-        return $list;
     }
 
     protected function createDemoFolders($parent, array $names)
