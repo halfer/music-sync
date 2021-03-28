@@ -36,7 +36,7 @@ class Directory extends FsObject
         foreach ($this->getContents() as $fsObject) {
             if ($fsObject instanceof Directory) {
                 $fsObject->glob();
-                $fsObject->recursivePopulate();
+                $fsObject->recursivePopulate($popSize);
             }
             if ($popSize && $fsObject instanceof File) {
                 $fsObject->populateSize();
