@@ -33,12 +33,7 @@ class GlobTest extends TestCase
 
     public function testRecursiveGlob()
     {
-        // Set up files + folders
-        $expectedFiles = ['a', 'b', 'c'];
-        $this->createDemoFiles(
-            $this->createDemoFolders('testRecursiveGlob', ['1', '2', '3', '4',]),
-            $expectedFiles
-        );
+        $this->setUpRecursiveTestStructure('testRecursiveGlob');
 
         // Run the operation
         $dir = new Directory($this->getNewTempDir('testRecursiveGlob'));
@@ -58,6 +53,41 @@ class GlobTest extends TestCase
         );
     }
 
+    public function testRecursiveSize()
+    {
+        $this->setUpRecursiveTestStructure('testRecursiveSize');
+
+        // Run the operation
+        $dir = new Directory($this->getNewTempDir('testRecursiveSize'));
+        $dir->glob();
+        $dir->recursivePopulate(true);
+
+        // Test result
+        $innerContents = [
+            ['name' => 'a', 'size' => 0, ],
+            ['name' => 'b', 'size' => 0, ],
+            ['name' => 'c', 'size' => 0, ],
+        ];
+        $this->assertEquals(
+            $this->exploreDirectory($dir),
+            [
+                ['name' => '1', 'contents' => $innerContents, ],
+                ['name' => '2', 'contents' => $innerContents, ],
+                ['name' => '3', 'contents' => $innerContents, ],
+                ['name' => '4', 'contents' => $innerContents, ],
+            ]
+        );
+    }
+
+    protected function setUpRecursiveTestStructure(string $parent)
+    {
+        $expectedFiles = ['a', 'b', 'c'];
+        $this->createDemoFiles(
+            $this->createDemoFolders($parent, ['1', '2', '3', '4',]),
+            $expectedFiles
+        );
+    }
+
     /**
      * This does not work
      */
@@ -67,6 +97,9 @@ class GlobTest extends TestCase
             $entry = ['name' => $item->getName(), ];
             if ($item instanceof Directory) {
                 $entry['contents'] = $this->exploreDirectory($item);
+            }
+            if ($item instanceof File && $item->hasSize()) {
+                $entry['size'] = $item->getSize();
             }
             $list[] = $entry;
         }

@@ -31,9 +31,14 @@ class File extends FsObject
         $this->size = $size;
     }
 
+    public function hasSize(): bool
+    {
+        return isset($this->size);
+    }
+
     public function getSize(): int
     {
-        if (!isset($this->size)) {
+        if (!$this->hasSize()) {
             throw new RuntimeException(
                 'Sizes must be populated before use'
             );

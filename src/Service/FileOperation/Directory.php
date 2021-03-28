@@ -21,26 +21,20 @@ class Directory extends FsObject
             DIRECTORY_SEPARATOR .
             $pattern;
 
-        foreach (glob($path) as $path)
-        {
+        foreach (glob($path) as $path) {
             $this->pushObject($path);
         }
         $this->setPopulated();
     }
 
-    public function recursivePopulate(array $options = [])
+    /**
+     * Populates FS structure, and optionally gets file sizes too
+     * @param bool $popSize
+     */
+    public function recursivePopulate(bool $popSize = false)
     {
-        // Defaults to true
-        $popContents = isset($options[self::POPULATE_OPTION_CONTENTS]) ?
-            (bool) $options[self::POPULATE_OPTION_CONTENTS] :
-            true;
-        // Defaults to false
-        $popSize = isset($options[self::POPULATE_OPTION_SIZE]) ?
-            (bool) $options[self::POPULATE_OPTION_SIZE] :
-            false;
-
         foreach ($this->getContents() as $fsObject) {
-            if ($popContents && $fsObject instanceof Directory) {
+            if ($fsObject instanceof Directory) {
                 $fsObject->glob();
                 $fsObject->recursivePopulate();
             }
