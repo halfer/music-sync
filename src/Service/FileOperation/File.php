@@ -6,6 +6,8 @@ use RuntimeException;
 
 class File extends FsObject
 {
+    use FileLike;
+
     protected int $size;
 
     public function __construct(string $name)

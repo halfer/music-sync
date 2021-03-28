@@ -30,11 +30,4 @@ abstract class FsObject
     {
         return $this->path;
     }
-
-    protected function nameContainsTrailingSeparator(string $name)
-    {
-        $lastChar = substr($name, -1, 1);
-
-        return $lastChar === DIRECTORY_SEPARATOR;
-    }
 }

@@ -6,6 +6,8 @@ use RuntimeException;
 
 class Link extends FsObject
 {
+    use FileLike;
+
     public function __construct(string $name)
     {
         if ($this->nameContainsTrailingSeparator($name)) {
