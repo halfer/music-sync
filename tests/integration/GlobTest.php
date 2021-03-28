@@ -2,9 +2,9 @@
 
 namespace MusicSync\Test\Integration;
 
+use MusicSync\Test\TestCase;
 use MusicSync\Service\FileOperation\Directory;
 use MusicSync\Service\FileOperation\File;
-use PHPUnit\Framework\TestCase;
 
 class GlobTest extends TestCase
 {

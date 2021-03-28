@@ -2,7 +2,7 @@
 
 namespace MusicSync\Test\Unit;
 
-use PHPUnit\Framework\TestCase;
+use MusicSync\Test\TestCase;
 
 class DirectoryTest extends TestCase
 {

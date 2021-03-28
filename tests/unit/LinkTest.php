@@ -2,7 +2,7 @@
 
 namespace MusicSync\Test\Unit;
 
-use PHPUnit\Framework\TestCase;
+use MusicSync\Test\TestCase;
 use MusicSync\Service\FileOperation\Link;
 use Exception;
 
