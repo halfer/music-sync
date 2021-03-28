@@ -12,6 +12,7 @@ class Directory extends FsObject
     protected array $contents = [];
     protected bool $populated = false;
     protected bool $sortDirectionAscending = true;
+    protected ?Factory $factory = null;
 
     public function glob(string $pattern = '*')
     {
@@ -49,9 +50,9 @@ class Directory extends FsObject
     protected function pushObject(string $path)
     {
         if (is_file($path)) {
-            $this->contents[] = new File($path);
+            $this->contents[] = $this->getFactory()->createFile($path);
         } elseif (is_dir($path)) {
-            $this->contents[] = new Directory($path);
+            $this->contents[] = $this->getFactory()->createDirectory($path);
         }
     }
 
@@ -81,6 +82,16 @@ class Directory extends FsObject
                 $fsObject->recursiveSort($sortType, $ascending);
             }
         }
+    }
+
+    /**
+     * Sets a custom object factory if required
+     *
+     * @param Factory $factory
+     */
+    public function setFactory(Factory $factory)
+    {
+        $this->factory = $factory;
     }
 
     protected function getSorter(string $sortType)
@@ -142,5 +153,17 @@ class Directory extends FsObject
     protected function setPopulated()
     {
         $this->populated = true;
+    }
+
+    protected function getFactory()
+    {
+        // Only create a default one once
+        static $factory = null;
+        if (!$this->factory) {
+            $factory = new Factory();
+        }
+
+        // Prefer the custom one, but use the default one otherwise
+        return $this->factory ?: $factory;
     }
 }
