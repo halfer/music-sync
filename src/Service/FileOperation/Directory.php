@@ -72,9 +72,13 @@ class Directory extends FsObject
 
     public function recursiveSort(string $sortType, bool $ascending = true)
     {
+        // Do a regular sort on self
+        $this->sort($sortType, $ascending);
+
+        // Now do the same for all children
         foreach ($this->getContents() as $fsObject) {
             if ($fsObject instanceof Directory) {
-                // TODO call recursive sorter here, passing in $fsObject
+                $fsObject->recursiveSort($sortType, $ascending);
             }
         }
     }
