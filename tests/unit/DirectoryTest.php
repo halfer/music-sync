@@ -16,10 +16,8 @@ class DirectoryTest extends TestCase
 
     public function testSortByNameAscending()
     {
-        $dir = new DirectoryTestHarness('home');
-        foreach (['c', 'a', 'd', 'b'] as $fileName) {
-            $dir->pushObjectPublic(new File($fileName));
-        }
+        $dir = $this->createDemoDirForNames();
+
         $dir->sort(Directory::SORT_NAME);
         $this->assertEquals(
             ['a', 'b', 'c', 'd', ],
@@ -27,17 +25,10 @@ class DirectoryTest extends TestCase
         );
     }
 
-    public function testSortBySizeAscending()
-    {
-        $this->markTestIncomplete();
-    }
-
     public function testSortByNameDescending()
     {
-        $dir = new DirectoryTestHarness('home');
-        foreach (['c', 'a', 'd', 'b'] as $fileName) {
-            $dir->pushObjectPublic(new File($fileName));
-        }
+        $dir = $this->createDemoDirForNames();
+
         $dir->sort(Directory::SORT_NAME, false);
         $this->assertEquals(
             ['d', 'c', 'b', 'a', ],
@@ -45,9 +36,52 @@ class DirectoryTest extends TestCase
         );
     }
 
+    protected function createDemoDirForNames()
+    {
+        $dir = new DirectoryTestHarness('home');
+        foreach (['c', 'a', 'd', 'b'] as $fileName) {
+            $dir->pushObjectPublic(new File($fileName));
+        }
+
+        return $dir;
+    }
+
+    public function testSortBySizeAscending()
+    {
+        $dir = $this->createDemoDirForSizes();
+
+        $dir->sort(Directory::SORT_SIZE);
+        $this->assertEquals(
+            ['d', 'b', 'a', 'c', ],
+            $this->getFilenameList($dir)
+        );
+    }
+
     public function testSortBySizeDescending()
     {
-        $this->markTestIncomplete();
+        $dir = $this->createDemoDirForSizes();
+
+        $dir->sort(Directory::SORT_SIZE, false);
+        $this->assertEquals(
+            ['c', 'a', 'b', 'd', ],
+            $this->getFilenameList($dir)
+        );
+    }
+
+    protected function createDemoDirForSizes()
+    {
+        $dir = new DirectoryTestHarness('home');
+        $files = [
+            'a' => 50,    'b' => 25,
+            'c' => 75,    'd' => 15,
+        ];
+        foreach ($files as $fileName => $size) {
+            $file = new File($fileName);
+            $file->setSize($size);
+            $dir->pushObjectPublic($file);
+        }
+
+        return $dir;
     }
 
     protected function getFilenameList(Directory $dir)
