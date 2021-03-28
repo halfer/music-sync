@@ -10,8 +10,7 @@ class File extends FsObject
 
     public function __construct(string $name)
     {
-        $lastChar = substr($name, -1, 1);
-        if ($lastChar === DIRECTORY_SEPARATOR) {
+        if ($this->nameContainsTrailingSeparator($name)) {
             throw new RuntimeException(
                 'A directory separator cannot be the last character in a file'
             );
