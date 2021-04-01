@@ -12,6 +12,11 @@ class Factory
         return new File($name, $parent);
     }
 
+    public function createLink(string $name, Directory $parent = null): Link
+    {
+        return new Link($name, $parent);
+    }
+
     public function createDirectory(string $name, Directory $parent = null): Directory
     {
         return new Directory($name, $parent);

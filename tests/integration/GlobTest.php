@@ -58,12 +58,15 @@ class GlobTest extends TestCase
         $parent = $this->getNewTempDir(__FUNCTION__);
         $this->setUpRecursiveTestStructure($parent);
         $this->createDemoFiles([$parent], ['a', 'b', 'c', ]);
-        // Create some folders
-        // Create some links too
+        $this->createDemoLinks([$parent], ['d', 'e', 'f', ]);
+        @mkdir($parent . DIRECTORY_SEPARATOR . 'g');
+        @mkdir($parent . DIRECTORY_SEPARATOR . 'h');
 
         $dir = new Directory($parent);
         $dir->glob();
         $this->assertEquals(3, $dir->getFileCount());
+        $this->assertEquals(3, $dir->getLinkCount());
+        $this->assertEquals(2, $dir->getDirCount());
     }
 
     public function testRecursiveGlobTotals()
@@ -123,6 +126,13 @@ class GlobTest extends TestCase
         }
     }
 
+    protected function createDemoLinks(array $tmps, array $expectedLinks)
+    {
+        foreach ($tmps as $tmp) {
+            $this->createLinks($tmp, $expectedLinks);
+        }
+    }
+
     protected function getTempDir()
     {
         $testRoot = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..');
@@ -142,6 +152,15 @@ class GlobTest extends TestCase
     {
         foreach ($files as $file) {
             touch($parent . DIRECTORY_SEPARATOR . $file);
+        }
+    }
+
+    protected function createLinks(string $parent, array $links)
+    {
+        $testRoot = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..');
+        $randomFile = $testRoot . DIRECTORY_SEPARATOR . 'bootstrap.php';
+        foreach ($links as $link) {
+            symlink($randomFile, $parent . DIRECTORY_SEPARATOR . $link);
         }
     }
 }

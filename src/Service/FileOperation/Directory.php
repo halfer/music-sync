@@ -53,7 +53,9 @@ class Directory extends FsObject
 
     protected function pushObject(string $path)
     {
-        if (is_file($path)) {
+        if (is_link($path)) {
+            $this->contents[] = $this->getFactory()->createLink($path);
+        } elseif (is_file($path)) {
             $this->contents[] = $this->getFactory()->createFile($path);
         } elseif (is_dir($path)) {
             $this->contents[] = $this->getFactory()->createDirectory($path);
@@ -76,12 +78,12 @@ class Directory extends FsObject
 
     public function getDirCount()
     {
-        return $this->countObjectsByType('Directory');
+        return $this->countObjectsByType(Directory::class);
     }
 
     public function getLinkCount()
     {
-        return $this->countObjectsByType('Link');
+        return $this->countObjectsByType(Link::class);
     }
 
     protected function countObjectsByType(string $type)
