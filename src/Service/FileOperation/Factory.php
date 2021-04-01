@@ -7,14 +7,14 @@ class Factory
     // The strategy to use when estimating progress in a recursive op
     const PROGRESS_ALGO_SIMPLE = 'simple';
 
-    public function createFile(string $name): File
+    public function createFile(string $name, Directory $parent = null): File
     {
-        return new File($name);
+        return new File($name, $parent);
     }
 
-    public function createDirectory(string $name): Directory
+    public function createDirectory(string $name, Directory $parent = null): Directory
     {
-        return new Directory($name);
+        return new Directory($name, $parent);
     }
 
     public function createProgressDevice(string $type)
@@ -28,6 +28,6 @@ class Factory
 
     protected function createSimpleProgressDevice()
     {
-
+        // TODO
     }
 }

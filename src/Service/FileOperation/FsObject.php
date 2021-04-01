@@ -7,9 +7,10 @@ use RuntimeException;
 abstract class FsObject
 {
     protected string $name;
+    protected ?Directory $parent;
     protected ?string $path = null;
 
-    public function __construct(string $name)
+    public function __construct(string $name, Directory $parent = null)
     {
         // Split a name into path/name components
         $lastSlash = strrpos($name, DIRECTORY_SEPARATOR);
@@ -19,6 +20,7 @@ abstract class FsObject
         }
 
         $this->name = $name;
+        $this->parent = $parent;
     }
 
     public function getName(): string
@@ -29,5 +31,10 @@ abstract class FsObject
     public function getPath(): ?string
     {
         return $this->path;
+    }
+
+    public function getParent(): Directory
+    {
+        return $this->parent;
     }
 }

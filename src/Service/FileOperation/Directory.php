@@ -12,6 +12,8 @@ class Directory extends FsObject
     protected array $contents = [];
     protected bool $populated = false;
     protected bool $sortDirectionAscending = true;
+    protected int $totalCount = 0;
+    protected int $totalSize = 0;
     protected ?Factory $factory = null;
 
     public function glob(string $pattern = '*')
@@ -43,6 +45,9 @@ class Directory extends FsObject
             }
             if ($popSize && $fsObject instanceof File) {
                 $fsObject->populateSize();
+                // How to reset the size?
+                // How to announce the size to parents?
+                // Get a class dump working to figure this out!
             }
         }
     }
@@ -54,6 +59,8 @@ class Directory extends FsObject
         } elseif (is_dir($path)) {
             $this->contents[] = $this->getFactory()->createDirectory($path);
         }
+
+        $this->totalCount++;
     }
 
     public function getContents()
