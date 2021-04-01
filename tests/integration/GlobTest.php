@@ -17,7 +17,7 @@ class GlobTest extends TestCase
     {
         // Set up files + folders
         $expectedFiles = ['a', 'b', ];
-        $tmp = $this->getNewTempDir('testNonRecursiveGlob');
+        $tmp = $this->getNewTempDir(__FUNCTION__);
         $this->createDemoFiles([$tmp], $expectedFiles);
 
         // Run the operation
@@ -33,10 +33,10 @@ class GlobTest extends TestCase
 
     public function testRecursiveGlob()
     {
-        $this->setUpRecursiveTestStructure('testRecursiveGlob');
+        $this->setUpRecursiveTestStructure(__FUNCTION__);
 
         // Run the operation
-        $dir = new Directory($this->getNewTempDir('testRecursiveGlob'));
+        $dir = new Directory($this->getNewTempDir(__FUNCTION__));
         $dir->glob();
         $dir->recursivePopulate();
 
@@ -53,12 +53,30 @@ class GlobTest extends TestCase
         );
     }
 
+    public function testGlobCounts()
+    {
+        $parent = $this->getNewTempDir(__FUNCTION__);
+        $this->setUpRecursiveTestStructure($parent);
+        $this->createDemoFiles([$parent], ['a', 'b', 'c', ]);
+        // Create some folders
+        // Create some links too
+
+        $dir = new Directory($parent);
+        $dir->glob();
+        $this->assertEquals(3, $dir->getFileCount());
+    }
+
+    public function testRecursiveGlobTotals()
+    {
+        $this->markTestIncomplete();
+    }
+
     public function testRecursiveSize()
     {
-        $this->setUpRecursiveTestStructure('testRecursiveSize');
+        $this->setUpRecursiveTestStructure(__FUNCTION__);
 
         // Run the operation
-        $dir = new Directory($this->getNewTempDir('testRecursiveSize'));
+        $dir = new Directory($this->getNewTempDir(__FUNCTION__));
         $dir->glob();
         $dir->recursivePopulate(true);
 

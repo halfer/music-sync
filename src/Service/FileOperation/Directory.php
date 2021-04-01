@@ -12,7 +12,6 @@ class Directory extends FsObject
     protected array $contents = [];
     protected bool $populated = false;
     protected bool $sortDirectionAscending = true;
-    protected int $totalCount = 0;
     protected int $totalSize = 0;
     protected ?Factory $factory = null;
 
@@ -59,8 +58,6 @@ class Directory extends FsObject
         } elseif (is_dir($path)) {
             $this->contents[] = $this->getFactory()->createDirectory($path);
         }
-
-        $this->totalCount++;
     }
 
     public function getContents()
@@ -70,6 +67,34 @@ class Directory extends FsObject
         }
 
         return $this->contents;
+    }
+
+    public function getFileCount()
+    {
+        return $this->countObjectsByType(File::class);
+    }
+
+    public function getDirCount()
+    {
+        return $this->countObjectsByType('Directory');
+    }
+
+    public function getLinkCount()
+    {
+        return $this->countObjectsByType('Link');
+    }
+
+    protected function countObjectsByType(string $type)
+    {
+        $count = 0;
+        foreach ($this->contents as $fsObject)
+        {
+            if ($fsObject instanceof $type) {
+                $count++;
+            }
+        }
+
+        return $count;
     }
 
     public function sort(string $sortType, bool $ascending = true)
