@@ -22,6 +22,11 @@ class Factory
         return new Directory($name, $parent);
     }
 
+    public function createContentsCache(): ContentsCache
+    {
+        return new ContentsCache();
+    }
+
     public function createProgressDevice(string $type)
     {
         switch ($type) {
