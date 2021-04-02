@@ -15,11 +15,6 @@ class ContentsCache
      */
     public function serialise(array $contents)
     {
-        $data = json_encode(
-            $contents,
-            JSON_PRETTY_PRINT
-        );
-
         /**
          * The magic number is a simple check to determine that the format was
          * written by this system.
@@ -31,10 +26,13 @@ class ContentsCache
             'purpose' => 'Directory cache',
             'version' => self::LATEST_VERSION,
             'magic-number' => self::getMagicNumber(),
-            'data' => $data,
+            'data' => $contents,
         ];
 
-        return $data;
+        return json_encode(
+            $contents,
+            JSON_PRETTY_PRINT
+        );
     }
 
     /**

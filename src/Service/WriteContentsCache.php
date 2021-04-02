@@ -22,17 +22,32 @@ class WriteContentsCache
         $this->directory = $dir;
     }
 
-    public function save(string $name, string $cachePath)
+    public function save(string $cachePath, string $name)
     {
         $cache = $this->getFactory()->createContentsCache();
         $data = $cache->serialise($this->getDirectory()->getContents());
-        $file = $this->getFactory()->createFile($cachePath);
+
+        $this->createCacheDirectory($cachePath);
+        $cacheFile = $this->getCachePath($cachePath, $name);
+
+        $file = $this->getFactory()->createFile($cacheFile);
         $file->putContents($data);
     }
 
     protected function getDirectory(): Directory
     {
         return $this->directory;
+    }
+
+    protected function getCachePath(string $cachePath, string $name): string
+    {
+        return $cachePath . DIRECTORY_SEPARATOR . $name;
+    }
+
+    protected function createCacheDirectory(string $cachePath)
+    {
+        $dir = $this->getFactory()->createDirectory($cachePath);
+        $dir->create();
     }
 
     protected function getFactory(): FileOperationFactory

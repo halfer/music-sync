@@ -23,7 +23,8 @@ class File extends FsObject
     public function putContents(string $data)
     {
         return file_put_contents(
-            $this->getPath() . DIRECTORY_SEPARATOR . $this->getName()
+            $this->getPath() . DIRECTORY_SEPARATOR . $this->getName(),
+            $data
         );
     }
 }

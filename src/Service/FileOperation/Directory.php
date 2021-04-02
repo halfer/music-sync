@@ -78,6 +78,14 @@ class Directory extends FsObject
         return $this->contents;
     }
 
+    public function create()
+    {
+        $fullPath = $this->getPath() . DIRECTORY_SEPARATOR . $this->getName();
+        $result = @mkdir($fullPath, 0600, true);
+
+        return $result;
+    }
+
     public function getFileCount()
     {
         return $this->countObjectsByType(File::class);
