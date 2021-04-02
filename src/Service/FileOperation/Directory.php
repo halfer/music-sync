@@ -101,12 +101,13 @@ class Directory extends FsObject
     /**
      * Counts symlinks across the whole structure
      *
-     * @todo Maybe replace this with one that counts all types at the same time?
      * @return int
      */
     public function getLinkCountRecursive()
     {
-        return $this->countObjectsByTypeRecursively(Link::class);
+        $totals = $this->countObjectsByTypeRecursively2();
+
+        return $totals[1];
     }
 
     protected function countObjectsByTypeRecursively(string $type)
@@ -122,6 +123,30 @@ class Directory extends FsObject
         }
 
         return $total;
+    }
+
+    protected function countObjectsByTypeRecursively2()
+    {
+        $totalFile = $totalLink = $totalDir = 0;
+
+        foreach ($this->getContents() as $fsObject) {
+            /* @var $fsObject FsObject */
+            if ($fsObject instanceof Directory) {
+                list($subTotalFile,
+                     $subTotalLink,
+                     $subTotalDir)= $fsObject->getFileCountRecursive();
+                $totalFile += $subTotalFile;
+                $totalLink += $subTotalLink;
+                $totalDir += $subTotalDir;
+            // Links count as files, so do links first :=)
+            } elseif ($fsObject instanceof Link) {
+                $totalLink += 1;
+            } elseif ($fsObject instanceof File) {
+                $totalFile += 1;
+            }
+        }
+
+        return [$totalFile, $totalLink, $totalDir, ];
     }
 
     protected function countObjectsByType(string $type)
