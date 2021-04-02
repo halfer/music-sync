@@ -94,7 +94,7 @@ class Directory extends FsObject
      */
     public function getFileCountRecursive()
     {
-        $totals = $this->countObjectsByTypeRecursively2();
+        $totals = $this->countObjectsByTypeRecursively();
 
         return $totals[0];
     }
@@ -106,12 +106,24 @@ class Directory extends FsObject
      */
     public function getLinkCountRecursive()
     {
-        $totals = $this->countObjectsByTypeRecursively2();
+        $totals = $this->countObjectsByTypeRecursively();
 
         return $totals[1];
     }
 
-    protected function countObjectsByTypeRecursively2()
+    /**
+     * Counts directories across the whole structure
+     *
+     * @return int
+     */
+    public function getDirCountRecursive()
+    {
+        $totals = $this->countObjectsByTypeRecursively();
+
+        return $totals[2];
+    }
+
+    protected function countObjectsByTypeRecursively()
     {
         $totalFile = $totalLink = $totalDir = 0;
 
@@ -120,10 +132,11 @@ class Directory extends FsObject
             if ($fsObject instanceof Directory) {
                 list($subTotalFile,
                      $subTotalLink,
-                     $subTotalDir)= $fsObject->countObjectsByTypeRecursively2();
+                     $subTotalDir)= $fsObject->countObjectsByTypeRecursively();
                 $totalFile += $subTotalFile;
                 $totalLink += $subTotalLink;
-                $totalDir += $subTotalDir;
+                // Note that the dir we are scanning should also be counted :)
+                $totalDir += $subTotalDir + 1;
             // Links count as files, so do links first :=)
             } elseif ($fsObject instanceof Link) {
                 $totalLink += 1;

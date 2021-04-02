@@ -91,8 +91,7 @@ class GlobTest extends TestCase
             $dir->getFileCountRecursive()
         );
         $this->assertEquals(6, $dir->getLinkCountRecursive());
-        // @todo This should be a recursive call
-        #$this->assertEquals(6, $dir->getDirCount());
+        $this->assertEquals(6, $dir->getDirCountRecursive());
     }
 
     /**
