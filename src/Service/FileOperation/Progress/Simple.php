@@ -15,7 +15,33 @@ class Simple implements Progress
 
     }
 
-    public function getPercent(): int {
+    /**
+     * Just experimenting with some ideas here about how to declare
+     * where we are in the hierarchy.
+     *
+     *  A       B     C      D
+     * ------  ---   ----   ---
+     * D E  F  GHI   JKLM   NOP
+     *   |
+     *   Q
+     */
+    public function declarePosition(int $rootPosition, int $fileCount)
+    {
 
+    }
+
+    public function getPercent(): int
+    {
+
+    }
+
+    /**
+     * The Simple progress device is always available
+     *
+     * @return bool
+     */
+    public function isOperational(): bool
+    {
+        return true;
     }
 }

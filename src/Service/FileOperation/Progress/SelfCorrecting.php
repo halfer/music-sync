@@ -18,7 +18,13 @@ class SelfCorrecting #implements Progress
 
     }
 
-    public function getPercent(): int {
+    public function getPercent(): int
+    {
+
+    }
+
+    public function isOperational(): bool
+    {
 
     }
 }

@@ -9,4 +9,6 @@ interface Progress
     public function scanDirectory(Directory $dir);
 
     public function getPercent(): int;
+
+    public function isOperational(): bool;
 }
