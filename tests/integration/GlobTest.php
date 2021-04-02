@@ -28,7 +28,7 @@ class GlobTest extends TestCase
         foreach ($dir->getContents() as $content) {
             $actualFiles[] = $content->getName();
         }
-        $this->assertEquals($expectedFiles, $actualFiles);
+        $this->assertEquals(['file_a', 'file_b', ], $actualFiles);
     }
 
     public function testRecursiveGlob()
@@ -41,7 +41,10 @@ class GlobTest extends TestCase
         $dir->recursivePopulate();
 
         // Test result
-        $innerContents = [['name' => 'a', ], ['name' => 'b', ], ['name' => 'c', ], ];
+        $innerContents = [
+            ['name' => 'file_a', ],
+            ['name' => 'file_b', ],
+            ['name' => 'file_c', ], ];
         $this->assertEquals(
             $this->exploreDirectory($dir),
             [
@@ -73,14 +76,23 @@ class GlobTest extends TestCase
     {
         $parent = $this->getNewTempDir(__FUNCTION__);
         $this->setUpRecursiveTestStructure(__FUNCTION__);
+        $firstDir = $parent . DIRECTORY_SEPARATOR . '1';
+        @mkdir($firstDir . DIRECTORY_SEPARATOR . 'g');
+        @mkdir($firstDir . DIRECTORY_SEPARATOR . 'h');
+        $this->createDemoLinks(
+            [$parent, $firstDir],
+            ['d', 'e', 'f', ]
+        );
 
-        # @todo Add dir and link counts?
         $dir = new Directory($parent);
         $dir->recursivePopulate();
         $this->assertEquals(
             12,
             $dir->getFileCountRecursive()
         );
+        // @todo These should be recursive calls
+        $this->assertEquals(6, $dir->getDirCount());
+        $this->assertEquals(6, $dir->getLinkCount());
     }
 
     /**
@@ -98,9 +110,9 @@ class GlobTest extends TestCase
 
         // Test result
         $innerContents = [
-            ['name' => 'a', 'size' => 0, ],
-            ['name' => 'b', 'size' => 0, ],
-            ['name' => 'c', 'size' => 0, ],
+            ['name' => 'file_a', 'size' => 0, ],
+            ['name' => 'file_b', 'size' => 0, ],
+            ['name' => 'file_c', 'size' => 0, ],
         ];
         $this->assertEquals(
             $this->exploreDirectory($dir),
@@ -164,7 +176,9 @@ class GlobTest extends TestCase
     protected function touchFiles(string $parent, array $files)
     {
         foreach ($files as $file) {
-            touch($parent . DIRECTORY_SEPARATOR . $file);
+            touch(
+                $parent . DIRECTORY_SEPARATOR . 'file_' . $file
+            );
         }
     }
 
@@ -173,7 +187,9 @@ class GlobTest extends TestCase
         $testRoot = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..');
         $randomFile = $testRoot . DIRECTORY_SEPARATOR . 'bootstrap.php';
         foreach ($links as $link) {
-            symlink($randomFile, $parent . DIRECTORY_SEPARATOR . $link);
+            symlink(
+                $randomFile,
+                $parent . DIRECTORY_SEPARATOR . 'link_' . $link);
         }
     }
 }
