@@ -33,22 +33,28 @@ class Directory extends FsObject
     /**
      * Populates FS structure, and optionally gets file sizes too
      *
+     * @note should I track file and link sizes separately?
+     *
      * @param bool $popSize
      */
     public function recursivePopulate(bool $popSize = false)
     {
+        $sizeTotal = 0;
+
         $this->glob();
         foreach ($this->getContents() as $fsObject) {
             if ($fsObject instanceof Directory) {
                 $fsObject->glob();
                 $fsObject->recursivePopulate($popSize);
+                $sizeTotal += $fsObject->getTotalSize();
             }
             if ($popSize && $fsObject instanceof File) {
-                $fsObject->populateSize();
-                // How to reset the size?
-                // How to announce the size to parents?
-                // Get a class dump working to figure this out!
+                $sizeTotal += $fsObject->populateSize();
             }
+        }
+
+        if ($popSize) {
+            $this->setTotalSize($sizeTotal);
         }
     }
 
@@ -242,6 +248,16 @@ class Directory extends FsObject
     protected function setSortDirection(bool $ascending)
     {
         $this->sortDirectionAscending = $ascending;
+    }
+
+    public function getTotalSize(): int
+    {
+        return $this->totalSize;
+    }
+
+    protected function setTotalSize(int $totalSize)
+    {
+        $this->totalSize = $totalSize;
     }
 
     protected function clearContents()
