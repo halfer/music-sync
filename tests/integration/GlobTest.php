@@ -124,7 +124,25 @@ class GlobTest extends TestCase
         );
     }
 
-    protected function setUpRecursiveTestStructure(string $parent)
+    /**
+     * @todo Make sure this works if we populate the contents twice
+     * @todo Add a symlink to the test data
+     */
+    public function testRecursiveTotalSize()
+    {
+        $parent = $this->getNewTempDir(__FUNCTION__);
+        $this->setUpRecursiveTestStructure(__FUNCTION__);
+        $this->createFiles($parent, ['d', 'e']);
+
+        // Run the operation
+        $dir = new Directory($parent);
+        $dir->glob();
+        $dir->recursivePopulate(true);
+
+        $this->assertEquals(84, $dir->getTotalSize());
+    }
+
+        protected function setUpRecursiveTestStructure(string $parent)
     {
         $expectedFiles = ['a', 'b', 'c'];
         $this->createDemoFiles(

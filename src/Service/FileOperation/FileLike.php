@@ -13,11 +13,12 @@ trait FileLike
         return $lastChar === DIRECTORY_SEPARATOR;
     }
 
-    public function populateSize()
+    public function populateSize(): int
     {
-        $this->setSize(
-            filesize($this->getPath() . DIRECTORY_SEPARATOR . $this->getName())
-        );
+        $size = filesize($this->getPath() . DIRECTORY_SEPARATOR . $this->getName());
+        $this->setSize($size);
+
+        return $size;
     }
 
     public function setSize(int $size)
