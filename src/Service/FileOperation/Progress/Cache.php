@@ -8,6 +8,7 @@ use MusicSync\Service\FileOperation\Directory;
  * A progress device that counts based on the prior
  * total object count in a prior run
  *
+ * @note The Progress classes are just sketch-only at this stage
  * @todo Implement the interface once it has settled down
  */
 class Cache #implements Progress
