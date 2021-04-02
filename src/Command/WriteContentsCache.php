@@ -12,6 +12,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class WriteContentsCache extends Command
 {
+    protected WriteContentsCacheService $writeContentsCacheService;
+
+    public function __construct(string $name = null)
+    {
+        parent::__construct($name);
+
+        // Create service ready to use
+        $this->writeContentsCacheService = new WriteContentsCacheService(
+            new FileOperationFactory()
+        );
+    }
+
     protected function configure()
     {
         $this
@@ -45,11 +57,9 @@ class WriteContentsCache extends Command
         $path = $input->getArgument('path');
         $this->validateArguments($name, $path);
 
-        $service = new WriteContentsCacheService(
-            new FileOperationFactory()
-        );
-        $service->create($path);
-        $service->save($this->getCachePath(), $name);
+        $service = $this->getWriteContentsCacheService();
+//        $service->create($path);
+//        $service->save($this->getCachePath(), $name);
 
         return self::SUCCESS;
     }
@@ -61,18 +71,15 @@ class WriteContentsCache extends Command
             $this->failInvalidName();
         }
 
-        // FIXME
-        if (false) {
-            $this->failPathDoesNotExist();
+        // @todo This is not a very nice error display - can we do better?
+        if (!$this->getWriteContentsCacheService()->dirExists($path)) {
+            throw new \RuntimeException(
+                'No such folder'
+            );
         }
     }
 
     protected function failInvalidName()
-    {
-
-    }
-
-    protected function failPathDoesNotExist()
     {
 
     }
@@ -88,5 +95,10 @@ class WriteContentsCache extends Command
     protected function getCachePath()
     {
         return '/root/.music-sync';
+    }
+
+    protected function getWriteContentsCacheService()
+    {
+        return $this->writeContentsCacheService;
     }
 }

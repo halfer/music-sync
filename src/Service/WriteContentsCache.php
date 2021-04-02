@@ -15,6 +15,17 @@ class WriteContentsCache
         $this->factory = $factory;
     }
 
+    public function dirExists(string $dirPath)
+    {
+        $dir = $this->getFactory()->createDirectory($dirPath);
+
+        return $dir->exists();
+    }
+
+    /**
+     * Creates an in-memory index of the specified directory
+     * @param string $dirPath
+     */
     public function create(string $dirPath)
     {
         $dir = $this->getFactory()->createDirectory($dirPath);

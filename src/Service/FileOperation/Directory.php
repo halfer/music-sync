@@ -86,6 +86,13 @@ class Directory extends FsObject
         return $result;
     }
 
+    public function exists()
+    {
+        return is_dir(
+            $this->getPath() . DIRECTORY_SEPARATOR . $this->getName()
+        );
+    }
+
     public function getFileCount()
     {
         return $this->countObjectsByType(File::class);
