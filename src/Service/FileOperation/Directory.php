@@ -90,12 +90,13 @@ class Directory extends FsObject
     /**
      * Counts files across the whole structure
      *
-     * @todo Maybe replace this with one that counts all types at the same time?
      * @return int
      */
     public function getFileCountRecursive()
     {
-        return $this->countObjectsByTypeRecursively(File::class);
+        $totals = $this->countObjectsByTypeRecursively2();
+
+        return $totals[0];
     }
 
     /**
@@ -108,21 +109,6 @@ class Directory extends FsObject
         $totals = $this->countObjectsByTypeRecursively2();
 
         return $totals[1];
-    }
-
-    protected function countObjectsByTypeRecursively(string $type)
-    {
-        $total = 0;
-        foreach ($this->getContents() as $fsObject) {
-            /* @var $fsObject FsObject */
-            if ($fsObject instanceof Directory) {
-                $total += $fsObject->getFileCountRecursive();
-            } elseif ($fsObject instanceof $type) {
-                $total += 1;
-            }
-        }
-
-        return $total;
     }
 
     protected function countObjectsByTypeRecursively2()
