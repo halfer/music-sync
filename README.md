@@ -14,6 +14,7 @@ Features
 Todo
 ---
 
+* Write a directory cache
 * Add progress device to recursive Directory populator (DFS)
 * Can we add a BFS progress device too?
 * Add a Symfony bar device to the Generate Listing command
@@ -23,4 +24,6 @@ Done
 ---
 
 * Recursive directory scanner
+* Recursive object counter
+* Recursive file total scanner
 * Add sorter device to Directory class
