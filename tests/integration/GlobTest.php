@@ -109,9 +109,9 @@ class GlobTest extends TestCase
 
         // Test result
         $innerContents = [
-            ['name' => 'file_a', 'size' => 0, ],
-            ['name' => 'file_b', 'size' => 0, ],
-            ['name' => 'file_c', 'size' => 0, ],
+            ['name' => 'file_a', 'size' => 6, ],
+            ['name' => 'file_b', 'size' => 6, ],
+            ['name' => 'file_c', 'size' => 6, ],
         ];
         $this->assertEquals(
             $this->exploreDirectory($dir),
@@ -146,7 +146,7 @@ class GlobTest extends TestCase
     protected function createDemoFiles(array $tmps, array $expectedFiles)
     {
         foreach ($tmps as $tmp) {
-            $this->touchFiles($tmp, $expectedFiles);
+            $this->createFiles($tmp, $expectedFiles);
         }
     }
 
@@ -172,11 +172,12 @@ class GlobTest extends TestCase
         return $tmp;
     }
 
-    protected function touchFiles(string $parent, array $files)
+    protected function createFiles(string $parent, array $files)
     {
         foreach ($files as $file) {
-            touch(
-                $parent . DIRECTORY_SEPARATOR . 'file_' . $file
+            file_put_contents(
+                $parent . DIRECTORY_SEPARATOR . 'file_' . $file,
+                "hello!"
             );
         }
     }
