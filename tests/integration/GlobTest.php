@@ -56,7 +56,7 @@ class GlobTest extends TestCase
     public function testGlobCounts()
     {
         $parent = $this->getNewTempDir(__FUNCTION__);
-        $this->setUpRecursiveTestStructure($parent);
+        $this->setUpRecursiveTestStructure(__FUNCTION__);
         $this->createDemoFiles([$parent], ['a', 'b', 'c', ]);
         $this->createDemoLinks([$parent], ['d', 'e', 'f', ]);
         @mkdir($parent . DIRECTORY_SEPARATOR . 'g');
@@ -66,20 +66,33 @@ class GlobTest extends TestCase
         $dir->glob();
         $this->assertEquals(3, $dir->getFileCount());
         $this->assertEquals(3, $dir->getLinkCount());
-        $this->assertEquals(2, $dir->getDirCount());
+        $this->assertEquals(6, $dir->getDirCount());
     }
 
-    public function testRecursiveGlobTotals()
+    public function testRecursiveGlobCounts()
     {
-        $this->markTestIncomplete();
+        $parent = $this->getNewTempDir(__FUNCTION__);
+        $this->setUpRecursiveTestStructure(__FUNCTION__);
+
+        # @todo Add dir and link counts?
+        $dir = new Directory($parent);
+        $dir->recursivePopulate();
+        $this->assertEquals(
+            12,
+            $dir->getFileCountRecursive()
+        );
     }
 
+    /**
+     * @todo Add a symlink to the test data
+     */
     public function testRecursiveSize()
     {
+        $parent = $this->getNewTempDir(__FUNCTION__);
         $this->setUpRecursiveTestStructure(__FUNCTION__);
 
         // Run the operation
-        $dir = new Directory($this->getNewTempDir(__FUNCTION__));
+        $dir = new Directory($parent);
         $dir->glob();
         $dir->recursivePopulate(true);
 

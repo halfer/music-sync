@@ -37,6 +37,7 @@ class Directory extends FsObject
      */
     public function recursivePopulate(bool $popSize = false)
     {
+        $this->glob();
         foreach ($this->getContents() as $fsObject) {
             if ($fsObject instanceof Directory) {
                 $fsObject->glob();
@@ -84,6 +85,27 @@ class Directory extends FsObject
     public function getLinkCount()
     {
         return $this->countObjectsByType(Link::class);
+    }
+
+    /**
+     * Counts files across the whole structure
+     *
+     * @todo Maybe replace this with one that counts all types at the same time?
+     * @return int
+     */
+    public function getFileCountRecursive()
+    {
+        $total = 0;
+        foreach ($this->getContents() as $fsObject) {
+            /* @var $fsObject FsObject */
+            if ($fsObject instanceof Directory) {
+                $total += $fsObject->getFileCountRecursive();
+            } elseif ($fsObject instanceof File) {
+                $total += 1;
+            }
+        }
+
+        return $total;
     }
 
     protected function countObjectsByType(string $type)
