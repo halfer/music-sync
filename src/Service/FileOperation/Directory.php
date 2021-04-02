@@ -134,7 +134,7 @@ class Directory extends FsObject
             if ($fsObject instanceof Directory) {
                 list($subTotalFile,
                      $subTotalLink,
-                     $subTotalDir)= $fsObject->getFileCountRecursive();
+                     $subTotalDir)= $fsObject->countObjectsByTypeRecursively2();
                 $totalFile += $subTotalFile;
                 $totalLink += $subTotalLink;
                 $totalDir += $subTotalDir;
