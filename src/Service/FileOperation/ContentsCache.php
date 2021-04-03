@@ -29,8 +29,10 @@ class ContentsCache
             'data' => $contents,
         ];
 
+        // FIXME we need to convert this recursively + manually
+
         return json_encode(
-            $contents,
+            $data,
             JSON_PRETTY_PRINT
         );
     }
@@ -64,6 +66,8 @@ class ContentsCache
                 'File version number is too high for this software version'
             );
         }
+
+        // FIXME we need to rebuild this structure recursively + manually
     }
 
     /**

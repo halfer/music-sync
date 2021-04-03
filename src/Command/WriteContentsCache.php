@@ -55,12 +55,19 @@ class WriteContentsCache extends Command
         // Get args and see if they are acceptable
         $name = $input->getArgument('name');
         $path = $input->getArgument('path');
-        $this->validateArguments($name, $path);
+        $error = $this->validateArguments($name, $path);
+
+        // @todo This is not a very nice error display - can we do better?
+        if ($error) {
+            $output->writeln('<error>Error: ' . $error . '</error>');
+            return self::FAILURE;
+        }
 
         $service = $this->getWriteContentsCacheService();
-//        $service->create($path);
-//        $service->save($this->getCachePath(), $name);
+        $service->create($path);
+        $service->save($this->getCachePath(), $name);
 
+        // @todo We need to determine if everything went ok
         return self::SUCCESS;
     }
 
@@ -71,12 +78,11 @@ class WriteContentsCache extends Command
             $this->failInvalidName();
         }
 
-        // @todo This is not a very nice error display - can we do better?
         if (!$this->getWriteContentsCacheService()->dirExists($path)) {
-            throw new \RuntimeException(
-                'No such folder'
-            );
+            return 'No such folder';
         }
+
+        return null;
     }
 
     protected function failInvalidName()
