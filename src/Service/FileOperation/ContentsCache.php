@@ -29,8 +29,6 @@ class ContentsCache
             'data' => $this->innerSerialise($contents),
         ];
 
-        // FIXME we need to convert this recursively + manually
-
         return json_encode(
             $data,
             JSON_PRETTY_PRINT
@@ -100,7 +98,7 @@ class ContentsCache
             );
         }
 
-        // Blow us if the version number is too high
+        // Blow up if the version number is too high
         $version = isset($decoded['version']) ? $decoded['version'] : null;
         if ($version > self::LATEST_VERSION) {
             throw new RuntimeException(
@@ -108,7 +106,12 @@ class ContentsCache
             );
         }
 
-        // FIXME we need to rebuild this structure recursively + manually
+        $data = isset($decoded['data']) && is_array($decoded['data']) ?
+            $decoded['data'] :
+            null;
+
+        // Rebuild this structure recursively + manually
+        $contents = $this->innerDeserialise($data);
     }
 
     /**
@@ -120,6 +123,11 @@ class ContentsCache
      * @param string $version
      */
     protected function isVersionCompatible(string $version): bool
+    {
+        // TODO
+    }
+
+    public function innerDeserialise(array $data)
     {
         // TODO
     }

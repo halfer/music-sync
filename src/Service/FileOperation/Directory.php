@@ -2,10 +2,13 @@
 
 namespace MusicSync\Service\FileOperation;
 
+use MusicSync\Service\FileOperation\AcceptsFactory;
 use RuntimeException;
 
 class Directory extends FsObject
 {
+    use AcceptsFactory;
+
     const SORT_NAME = 'name';
     const SORT_SIZE = 'size';
 
@@ -13,7 +16,6 @@ class Directory extends FsObject
     protected bool $populated = false;
     protected bool $sortDirectionAscending = true;
     protected int $totalSize = 0;
-    protected ?Factory $factory = null;
 
     public function glob(string $pattern = '*')
     {
@@ -212,16 +214,6 @@ class Directory extends FsObject
         }
     }
 
-    /**
-     * Sets a custom object factory if required
-     *
-     * @param Factory $factory
-     */
-    public function setFactory(Factory $factory)
-    {
-        $this->factory = $factory;
-    }
-
     protected function getSorter(string $sortType)
     {
         switch ($sortType) {
@@ -295,17 +287,5 @@ class Directory extends FsObject
     protected function setPopulated()
     {
         $this->populated = true;
-    }
-
-    protected function getFactory()
-    {
-        // Only create a default one once
-        static $factory = null;
-        if (!$this->factory) {
-            $factory = new Factory();
-        }
-
-        // Prefer the custom one, but use the default one otherwise
-        return $this->factory ?: $factory;
     }
 }
