@@ -26,7 +26,7 @@ class ContentsCache
             'purpose' => 'Directory cache',
             'version' => self::LATEST_VERSION,
             'magic-number' => self::getMagicNumber(),
-            'data' => $contents,
+            'data' => $this->innerSerialise($contents),
         ];
 
         // FIXME we need to convert this recursively + manually
@@ -35,6 +35,47 @@ class ContentsCache
             $data,
             JSON_PRETTY_PRINT
         );
+    }
+
+    protected function innerSerialise(array $contents)
+    {
+        $data = [];
+
+        foreach ($contents as $fsObject) {
+            /* @var $fsObject FsObject */
+            $dataObject = [
+                'name' => $fsObject->getName(),
+                'path' => $fsObject->getPath(),
+                'type' => $this->getType($fsObject),
+            ];
+            if ($fsObject instanceof Directory)
+            {
+                $dataObject['contents'] = $this->innerSerialise(
+                    $fsObject->getContents()
+                );
+            } else {
+                /* @var $fsObject FileLike */
+                $dataObject['size'] = $fsObject->getSize();
+            }
+
+            $data[] = $dataObject;
+        }
+
+        return $data;
+    }
+
+    protected function getType(FsObject $fsObject): string
+    {
+        switch (true) {
+            case $fsObject instanceof Directory:
+                return 'Directory';
+            case $fsObject instanceof Link:
+                return 'Link';
+            case $fsObject instanceof File:
+                return 'File';
+            default:
+                throw new RuntimeException('Type not recognised');
+        }
     }
 
     /**
