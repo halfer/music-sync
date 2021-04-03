@@ -28,7 +28,6 @@ Features
 Todo
 ---
 
-* Add a test that populates size data twice (see testRecursiveTotalSize)
 * Write a directory cache
 * Add progress device to recursive Directory populator (DFS)
 * Can we add a BFS progress device too?
