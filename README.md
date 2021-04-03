@@ -1,3 +1,17 @@
+Music Sync
+===
+
+Intro
+---
+
+This is a console system designed to simplify non-trivial music syncing between various devices. For example,
+you might have a primary music collection on your main personal machine in FLAC, but you want selected albums
+to be synced to your phone in a lower bitrate. You want another set of albums sent to your work laptop, but
+in FLAC.
+
+This project is an **unfinished** piece of software. Feel free to read the code, ask questions in the Issues,
+or ping me an email via my blog. I may finish it, I may not - watch this space!
+
 Features
 ---
 
