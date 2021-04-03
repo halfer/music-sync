@@ -44,7 +44,6 @@ class Directory extends FsObject
         $this->glob();
         foreach ($this->getContents() as $fsObject) {
             if ($fsObject instanceof Directory) {
-                $fsObject->glob();
                 $fsObject->recursivePopulate($popSize);
                 $sizeTotal += $fsObject->getTotalSize();
             }
