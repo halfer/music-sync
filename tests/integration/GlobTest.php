@@ -37,7 +37,6 @@ class GlobTest extends TestCase
 
         // Run the operation
         $dir = new Directory($this->getNewTempDir(__FUNCTION__));
-        $dir->glob();
         $dir->recursivePopulate();
 
         // Test result
@@ -104,7 +103,6 @@ class GlobTest extends TestCase
 
         // Run the operation
         $dir = new Directory($parent);
-        $dir->glob();
         $dir->recursivePopulate(true);
 
         // Test result
@@ -136,7 +134,6 @@ class GlobTest extends TestCase
 
         // Run the operation
         $dir = new Directory($parent);
-        $dir->glob();
         $dir->recursivePopulate(true);
 
         $this->assertEquals(84, $dir->getTotalSize());
