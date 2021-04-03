@@ -12,6 +12,13 @@ abstract class FsObject
 
     public function __construct(string $name, Directory $parent = null)
     {
+        // The name cannot be empty
+        if (!$name) {
+            throw new \RuntimeException(
+                'An object name cannot be empty'
+            );
+        }
+
         // Split a name into path/name components
         $lastSlash = strrpos($name, DIRECTORY_SEPARATOR);
         if ($lastSlash !== false) {

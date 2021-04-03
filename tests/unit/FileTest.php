@@ -22,6 +22,32 @@ class FileTest extends TestCase
         $this->assertNull($file->getPath());
     }
 
+    public function testFileEmptyNameRejected()
+    {
+        $pass = false;
+        try {
+            $file = new File('');
+        }
+        catch (\RuntimeException $e) {
+            if ($e->getMessage() === 'An object name cannot be empty') {
+                $pass = true;
+            }
+        }
+        $this->assertTrue($pass, 'String names in this class cannot be empty');
+    }
+
+    public function testFileNullNameRejected()
+    {
+        $pass = false;
+        try {
+            $file = new File(null);
+        }
+        catch (\TypeError $e) {
+            $pass = true;
+        }
+        $this->assertTrue($pass, 'Only string names are valid in this class');
+    }
+
     /**
      * Files with trailing directory separators are not allowed
      */

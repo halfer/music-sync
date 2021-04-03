@@ -68,7 +68,11 @@ class Directory extends FsObject
         }
     }
 
-    public function getContents()
+    /**
+     * @todo Use a custom exception here
+     * @return array
+     */
+    public function getContents(): array
     {
         if (!$this->populated) {
             throw new RuntimeException('Cannot get contents before population');
@@ -77,7 +81,12 @@ class Directory extends FsObject
         return $this->contents;
     }
 
-    public function create()
+    /**
+     * Creates a directory in the file system
+     *
+     * @return bool
+     */
+    public function create(): bool
     {
         $fullPath = $this->getPath() . DIRECTORY_SEPARATOR . $this->getName();
         $result = @mkdir($fullPath, 0600, true);
@@ -85,7 +94,10 @@ class Directory extends FsObject
         return $result;
     }
 
-    public function exists()
+    /**
+     * @return bool
+     */
+    public function exists(): bool
     {
         return is_dir(
             $this->getPath() . DIRECTORY_SEPARATOR . $this->getName()

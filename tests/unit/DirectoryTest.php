@@ -11,7 +11,15 @@ class DirectoryTest extends TestCase
 {
     public function testContentsMustBePopulated()
     {
-        $this->markTestIncomplete();
+        $pass = false;
+        $dir = new Directory('home');
+        try {
+            $dir->getContents();
+        }
+        catch (\Exception $e) {
+            $pass = ($e->getMessage() === 'Cannot get contents before population');
+        }
+        $this->assertTrue($pass, 'Expected exception thrown');
     }
 
     public function testSortByNameAscending()
