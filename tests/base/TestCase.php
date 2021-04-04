@@ -25,4 +25,9 @@ class TestCase extends BaseTestCase
 
         return $list;
     }
+
+    protected function getTestDir()
+    {
+        return realpath(__DIR__ . '/..');
+    }
 }
