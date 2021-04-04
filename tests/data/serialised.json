@@ -1,0 +1,108 @@
+{
+  "name": "music-sync",
+  "purpose": "Directory cache",
+  "version": "1",
+  "magic-number": "83e6d427017b533d5baa07787869b18b",
+  "data": [
+    {
+      "name": "1",
+      "path": "\/project\/tests\/base\/tmp\/testSerialiseDirectory",
+      "type": "Directory",
+      "contents": [
+        {
+          "name": "file_a",
+          "path": "\/project\/tests\/base\/tmp\/testSerialiseDirectory\/1",
+          "type": "File",
+          "size": 6
+        },
+        {
+          "name": "file_b",
+          "path": "\/project\/tests\/base\/tmp\/testSerialiseDirectory\/1",
+          "type": "File",
+          "size": 6
+        },
+        {
+          "name": "file_c",
+          "path": "\/project\/tests\/base\/tmp\/testSerialiseDirectory\/1",
+          "type": "File",
+          "size": 6
+        }
+      ]
+    },
+    {
+      "name": "2",
+      "path": "\/project\/tests\/base\/tmp\/testSerialiseDirectory",
+      "type": "Directory",
+      "contents": [
+        {
+          "name": "file_a",
+          "path": "\/project\/tests\/base\/tmp\/testSerialiseDirectory\/2",
+          "type": "File",
+          "size": 6
+        },
+        {
+          "name": "file_b",
+          "path": "\/project\/tests\/base\/tmp\/testSerialiseDirectory\/2",
+          "type": "File",
+          "size": 6
+        },
+        {
+          "name": "file_c",
+          "path": "\/project\/tests\/base\/tmp\/testSerialiseDirectory\/2",
+          "type": "File",
+          "size": 6
+        }
+      ]
+    },
+    {
+      "name": "3",
+      "path": "\/project\/tests\/base\/tmp\/testSerialiseDirectory",
+      "type": "Directory",
+      "contents": [
+        {
+          "name": "file_a",
+          "path": "\/project\/tests\/base\/tmp\/testSerialiseDirectory\/3",
+          "type": "File",
+          "size": 6
+        },
+        {
+          "name": "file_b",
+          "path": "\/project\/tests\/base\/tmp\/testSerialiseDirectory\/3",
+          "type": "File",
+          "size": 6
+        },
+        {
+          "name": "file_c",
+          "path": "\/project\/tests\/base\/tmp\/testSerialiseDirectory\/3",
+          "type": "File",
+          "size": 6
+        }
+      ]
+    },
+    {
+      "name": "4",
+      "path": "\/project\/tests\/base\/tmp\/testSerialiseDirectory",
+      "type": "Directory",
+      "contents": [
+        {
+          "name": "file_a",
+          "path": "\/project\/tests\/base\/tmp\/testSerialiseDirectory\/4",
+          "type": "File",
+          "size": 6
+        },
+        {
+          "name": "file_b",
+          "path": "\/project\/tests\/base\/tmp\/testSerialiseDirectory\/4",
+          "type": "File",
+          "size": 6
+        },
+        {
+          "name": "file_c",
+          "path": "\/project\/tests\/base\/tmp\/testSerialiseDirectory\/4",
+          "type": "File",
+          "size": 6
+        }
+      ]
+    }
+  ]
+}
