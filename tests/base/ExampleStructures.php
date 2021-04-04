@@ -39,7 +39,7 @@ trait ExampleStructures
 
     protected function getTempDir()
     {
-        $testRoot = realpath(__DIR__ . DIRECTORY_SEPARATOR);
+        $testRoot = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..');
 
         return $testRoot . DIRECTORY_SEPARATOR . 'tmp';
     }
@@ -64,7 +64,7 @@ trait ExampleStructures
 
     protected function createLinks(string $parent, array $links)
     {
-        $testRoot = realpath(__DIR__ . DIRECTORY_SEPARATOR);
+        $testRoot = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..');
         $randomFile = $testRoot . DIRECTORY_SEPARATOR . 'bootstrap.php';
         foreach ($links as $link) {
             symlink(
