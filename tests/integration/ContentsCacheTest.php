@@ -12,13 +12,24 @@ class ContentsCacheTest extends TestCase
 {
     use ExampleStructures;
 
-    public function testSerialiseDirectory()
+    public function testSerialiseDirectoryWithSizes()
     {
-        $this->setUpRecursiveTestStructure(__FUNCTION__);
+        $this->runTestSerialiseDirectory(true);
+    }
+
+    public function testSerialiseDirectoryWithoutSizes()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function runTestSerialiseDirectory(bool $popSize)
+    {
+        $dirName = 'testSerialiseDirectory';
+        $this->setUpRecursiveTestStructure($dirName);
 
         // Run the operation
-        $dir = new Directory($this->getNewTempDir(__FUNCTION__));
-        $dir->recursivePopulate(true);
+        $dir = new Directory($this->getNewTempDir($dirName));
+        $dir->recursivePopulate($popSize);
 
         // Serialise the demo structure
         $cache = new ContentsCache();
