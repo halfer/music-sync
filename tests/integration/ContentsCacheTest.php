@@ -14,15 +14,15 @@ class ContentsCacheTest extends TestCase
 
     public function testSerialiseDirectoryWithSizes()
     {
-        $this->runTestSerialiseDirectory(true);
+        $this->runTestSerialiseDirectory(true, 'serialised-with-sizes.json');
     }
 
     public function testSerialiseDirectoryWithoutSizes()
     {
-        $this->markTestIncomplete();
+        $this->runTestSerialiseDirectory(false, 'serialised-without-sizes.json');
     }
 
-    public function runTestSerialiseDirectory(bool $popSize)
+    public function runTestSerialiseDirectory(bool $popSize, string $dataFile)
     {
         $dirName = 'testSerialiseDirectory';
         $this->setUpRecursiveTestStructure($dirName);
@@ -35,7 +35,7 @@ class ContentsCacheTest extends TestCase
         $cache = new ContentsCache();
         $serialised = $cache->serialise($dir->getContents());
 
-        $jsonExpected = $this->fetchDataFile('serialised.json');
+        $jsonExpected = $this->fetchDataFile($dataFile);
         $this->assertEquals(
             json_decode($jsonExpected, true),
             json_decode($serialised, true)
@@ -45,7 +45,7 @@ class ContentsCacheTest extends TestCase
     public function testDeserialiseDirectory()
     {
         // Fetch the raw
-        $json = $this->fetchDataFile('serialised.json');
+        $json = $this->fetchDataFile('serialised-with-sizes.json');
         $wrapper = json_decode($json, true);
 
         // Do a deserialisation

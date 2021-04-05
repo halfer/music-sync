@@ -55,7 +55,9 @@ class ContentsCache
                 );
             } else {
                 /* @var $fsObject FileLike */
-                $dataObject['size'] = $fsObject->getSize();
+                if ($fsObject->hasSize()) {
+                    $dataObject['size'] = $fsObject->getSize();
+                }
             }
 
             $data[] = $dataObject;
