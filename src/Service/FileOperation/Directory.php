@@ -83,6 +83,11 @@ class Directory extends FsObject
         return $this->contents;
     }
 
+    public function setContents(array $contents)
+    {
+        $this->contents = $contents;
+    }
+
     /**
      * Creates a directory in the file system
      *

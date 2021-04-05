@@ -6,6 +6,8 @@ use RuntimeException;
 
 class ContentsCache
 {
+    use AcceptsFactory;
+
     const LATEST_VERSION = '1';
 
     /**
@@ -111,7 +113,9 @@ class ContentsCache
             null;
 
         // Rebuild this structure recursively + manually
-        $contents = $this->innerDeserialise($data);
+        $contents = $this->innerDeserialise($decoded['data']);
+
+        return $contents;
     }
 
     /**
@@ -127,9 +131,59 @@ class ContentsCache
         // TODO
     }
 
-    public function innerDeserialise(array $data)
+    /**
+     * Converts an array representation to an array of objects
+     *
+     * @param array $contents
+     * @return array
+     */
+    public function innerDeserialise(array $contents)
     {
-        // TODO
+        foreach ($contents as $element) {
+            $type = $element['type'];
+            $fsObject = $this->createObjectForTypeName(
+                $type,
+                // The object will split the path leaf into the name property when it is created
+                $path = $element['path'] . DIRECTORY_SEPARATOR . $element['name']
+            );
+            if ($type === 'Directory') {
+                /* @var $fsObject FsObject */
+                $fsObject->setContents(
+                    $this->innerDeserialise($element['contents'])
+                );
+            }
+            $fsObjects[] = $fsObject;
+        }
+
+        return $fsObjects;
+    }
+
+    /**
+     * Recursive func to rebuild a contents structure
+     *
+     * @todo How to supply a parent Directory here?
+     * @todo Change return type from ?FsObject to FsObject (add exception in default clause)
+     * @todo Treat type case-insensitively
+     * @param string $type
+     * @param string $path
+     * @return FsObject|null
+     */
+    protected function createObjectForTypeName(string $type, string $path): ?FsObject
+    {
+        $fsObject = null;
+        switch ($type) {
+            case 'File':
+                $fsObject = $this->getFactory()->createFile($path);
+                break;
+            case 'Link':
+                $fsObject = $this->getFactory()->createLink($path);
+                break;
+            case 'Directory':
+                $fsObject = $this->getFactory()->createDirectory($path);
+                break;
+        }
+
+        return $fsObject;
     }
 
     protected static function getMagicNumber()
