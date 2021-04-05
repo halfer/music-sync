@@ -65,7 +65,16 @@ class ContentsCacheTest extends TestCase
                 $this->convertObjectTypeToString($fsObject)
             );
 
-            // @todo Call self recursively for directories
+            // Call self recursively for directories
+            if ($type === 'Directory') {
+                /* @var Directory $fsObject */
+                $this->comparator(
+                    $arrayEntry['contents'],
+                    $fsObject->getContents()
+                );
+            }
+
+            // @todo Create a test for with + without sizes (is without set up correctly?)
 
             next($fsObjects);
         }

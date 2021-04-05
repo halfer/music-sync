@@ -86,6 +86,7 @@ class Directory extends FsObject
     public function setContents(array $contents)
     {
         $this->contents = $contents;
+        $this->populated = true;
     }
 
     /**
