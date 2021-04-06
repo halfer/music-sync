@@ -59,7 +59,7 @@ class ContentsCacheTest extends TestCase
     }
 
     // Func to compare array and object formats
-    public function comparator(array $arrays, array $fsObjects)
+    protected function comparator(array $arrays, array $fsObjects)
     {
         foreach ($arrays as $arrayEntry) {
             /* @var FsObject $fsObject */
