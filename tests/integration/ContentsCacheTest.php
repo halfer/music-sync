@@ -5,6 +5,7 @@ namespace MusicSync\Test\Integration;
 use MusicSync\Service\FileOperation\ContentsCache;
 use MusicSync\Service\FileOperation\Directory;
 use MusicSync\Service\FileOperation\File;
+use MusicSync\Service\FileOperation\FileLike;
 use MusicSync\Service\FileOperation\FsObject;
 use MusicSync\Test\TestCase;
 
@@ -42,10 +43,20 @@ class ContentsCacheTest extends TestCase
         );
     }
 
-    public function testDeserialiseDirectory()
+    public function testDeserialiseDirectoryWithSizes()
     {
-        // Fetch the raw
-        $json = $this->fetchDataFile('serialised-with-sizes.json');
+        $this->runTestDeserialiseDirectory('serialised-with-sizes.json');
+    }
+
+    public function testDeserialiseDirectoryWithoutSizes()
+    {
+        $this->runTestDeserialiseDirectory('serialised-without-sizes.json');
+    }
+
+    public function runTestDeserialiseDirectory(string $dataFile)
+    {
+        // Fetch the raw data
+        $json = $this->fetchDataFile($dataFile);
         $wrapper = json_decode($json, true);
 
         // Do a deserialisation
@@ -71,6 +82,15 @@ class ContentsCacheTest extends TestCase
                 $arrayEntry['name'],
                 $fsObject->getName()
             );
+            if ($type === 'File' || $type === 'Link') {
+                /* @var $fsObject FileLike */
+                if (isset($arrayEntry['size'])) {
+                    $this->assertEquals(
+                        $arrayEntry['size'],
+                        $fsObject->getSize()
+                    );
+                }
+            }
             $this->assertEquals(
                 $type,
                 $this->convertObjectTypeToString($fsObject)

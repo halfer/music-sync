@@ -154,6 +154,12 @@ class ContentsCache
                     $this->innerDeserialise($element['contents'])
                 );
             }
+            if ($type === 'File' || $type === 'Link') {
+                /* @var $fsObject FileLike */
+                if (isset($element['size'])) {
+                    $fsObject->setSize($element['size']);
+                }
+            }
             $fsObjects[] = $fsObject;
         }
 
