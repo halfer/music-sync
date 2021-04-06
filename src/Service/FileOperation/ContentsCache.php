@@ -84,8 +84,9 @@ class ContentsCache
      * Converts a storable format to directory contents
      *
      * @param string $data
+     * @return array
      */
-    public function deserialise(string $data)
+    public function deserialise(string $data): array
     {
         $decoded = json_decode($data, true);
         if (!$decoded) {
