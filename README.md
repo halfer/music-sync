@@ -28,6 +28,8 @@ Features
 Todo
 ---
 
+* Implement --cache-dir for WriteContentsCache
+* Implement validateArguments for WriteContentsCache
 * Write a directory cache
 * Add progress device to recursive Directory populator (DFS)
 * Can we add a BFS progress device too?

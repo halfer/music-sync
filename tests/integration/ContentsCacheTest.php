@@ -105,8 +105,6 @@ class ContentsCacheTest extends TestCase
                 );
             }
 
-            // @todo Create a test for with + without sizes (is without set up correctly?)
-
             next($fsObjects);
         }
     }

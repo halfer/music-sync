@@ -24,6 +24,8 @@ class WriteContentsCache
 
     /**
      * Creates an in-memory index of the specified directory
+     *
+     * @todo Return boolean success
      * @param string $dirPath
      */
     public function create(string $dirPath)
@@ -33,6 +35,13 @@ class WriteContentsCache
         $this->directory = $dir;
     }
 
+    /**
+     * Saves a string representation of the in-memory index
+     *
+     * @todo Return boolean success
+     * @param string $cachePath
+     * @param string $name
+     */
     public function save(string $cachePath, string $name)
     {
         $cache = $this->getFactory()->createContentsCache();
