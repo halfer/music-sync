@@ -111,7 +111,11 @@ class ContentsCacheTest extends TestCase
         }
     }
 
-    protected function convertObjectTypeToString(FsObject $fsObject)
+    /**
+     * @param FsObject $fsObject
+     * @return string
+     */
+    protected function convertObjectTypeToString(FsObject $fsObject): string
     {
         $fullName = get_class($fsObject);
 
@@ -119,7 +123,11 @@ class ContentsCacheTest extends TestCase
         return substr($fullName, strrpos($fullName, '\\') + 1);
     }
 
-    protected function fetchDataFile(string $file)
+    /**
+     * @param string $file
+     * @return string
+     */
+    protected function fetchDataFile(string $file): string
     {
         return file_get_contents(
             $this->getTestDir() . '/data/' . $file
