@@ -128,7 +128,8 @@ class ContentsCacheTest extends TestCase
     protected function fetchDataFile(string $file): string
     {
         return file_get_contents(
-            $this->getTestDir() . '/data/' . $file
+            $this->getTestDir() . DIRECTORY_SEPARATOR .
+            'data' . DIRECTORY_SEPARATOR . $file
         );
     }
 }
