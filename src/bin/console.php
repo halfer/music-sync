@@ -11,12 +11,18 @@ $classes = [
     WriteContentsCache::class,
 ];
 
+// Get env vars etc here
+$homeDir = getenv('HOME');
+
 // Add them to the application
 $console = new Application();
 $commands = [];
 foreach ($classes as $class)
 {
-    $commands[] = new $class();
+    $instance = new $class();
+    /* @var $instance \MusicSync\Command\Base */
+    $instance->setHomeDir($homeDir);
+    $commands[] = $instance;
 }
 
 $console->addCommands($commands);

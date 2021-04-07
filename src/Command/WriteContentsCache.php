@@ -4,13 +4,12 @@ namespace MusicSync\Command;
 
 use MusicSync\Service\FileOperation\Factory as FileOperationFactory;
 use MusicSync\Service\WriteContentsCache as WriteContentsCacheService;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class WriteContentsCache extends Command
+class WriteContentsCache extends Base
 {
     protected WriteContentsCacheService $writeContentsCacheService;
 
@@ -93,14 +92,13 @@ class WriteContentsCache extends Command
     /**
      * Get the location of the cache
      *
-     * @todo Add the $HOME env var here, in a test-appropriate way
      * @todo Allow this to be over-ridden by --cache-dir
      *
      * @return string
      */
     protected function getCachePath()
     {
-        return '/root/.music-sync';
+        return $this->getHomeDir() . DIRECTORY_SEPARATOR . '.music-sync';
     }
 
     protected function getWriteContentsCacheService()
