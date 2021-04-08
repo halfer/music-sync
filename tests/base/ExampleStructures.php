@@ -52,6 +52,12 @@ trait ExampleStructures
         return $tmp;
     }
 
+    protected function wipeTempDir()
+    {
+        $tmpDir = $this->getTempDir();
+        exec(" rm -rf $tmpDir/*");
+    }
+
     protected function createFiles(string $parent, array $files)
     {
         foreach ($files as $file) {

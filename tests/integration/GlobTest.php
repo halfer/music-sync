@@ -11,8 +11,7 @@ class GlobTest extends TestCase
 
     public function setUp(): void
     {
-        $tmpDir = $this->getTempDir();
-        exec(" rm -rf $tmpDir/*");
+        $this->wipeTempDir();
     }
 
     public function testNonRecursiveGlob()
