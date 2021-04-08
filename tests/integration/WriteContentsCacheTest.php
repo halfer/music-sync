@@ -28,20 +28,8 @@ class WriteContentsCacheTest extends TestCase
         $this->setUpRecursiveTestStructure(__FUNCTION__);
         $this->getService()->create($dirPath);
 
-        // Write serialised representation
-        $cachePath = $this->getNewTempDir(__FUNCTION__ . 'Cache');
-        $this->getService()->save($cachePath, 'test.cache');
-
-        // Check it produces JSON
-        $cacheFile = $cachePath . DIRECTORY_SEPARATOR . 'test.cache';
-        $this->assertTrue(
-            is_array(
-                json_decode(
-                    file_get_contents($cacheFile),
-                    true
-                )
-            )
-        );
+        // If it doesn't fail, let's call that a success
+        $this->assertTrue(true);
     }
 
     public function testPopulateFailsIfDirectoryDoesNotExist()
@@ -56,7 +44,25 @@ class WriteContentsCacheTest extends TestCase
 
     public function testPopulateAndSaveEndToEnd()
     {
-        $this->markTestIncomplete();
+        // Create in-memory structure
+        $dirPath = $this->getNewTempDir(__FUNCTION__);
+        $this->setUpRecursiveTestStructure(__FUNCTION__);
+        $this->getService()->create($dirPath);
+
+        // Write serialised representation
+        $cachePath = $this->getNewTempDir(__FUNCTION__ . 'Cache');
+        $this->getService()->save($cachePath, 'test.cache');
+
+        // Check it produces JSON
+        $cacheFile = $cachePath . DIRECTORY_SEPARATOR . 'test.cache';
+        $this->assertTrue(
+            is_array(
+                json_decode(
+                    file_get_contents($cacheFile),
+                    true
+                )
+            )
+        );
     }
 
     /**
