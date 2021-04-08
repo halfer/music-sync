@@ -10,23 +10,27 @@ class WriteContentsCacheTest extends TestCase
 {
     use ExampleStructures;
 
+    protected WriteContentsCache $service;
+
     public function setUp(): void
     {
         $this->wipeTempDir();
+        $this->service = new WriteContentsCache(new FileOperationFactory());
     }
 
+    /**
+     * @todo Most of this is for the e2e
+     */
     public function testPopulateSucceeds()
     {
-        $service = new WriteContentsCache(new FileOperationFactory());
-
         // Create in-memory structure
         $dirPath = $this->getNewTempDir(__FUNCTION__);
         $this->setUpRecursiveTestStructure(__FUNCTION__);
-        $service->create($dirPath);
+        $this->getService()->create($dirPath);
 
         // Write serialised representation
         $cachePath = $this->getNewTempDir(__FUNCTION__ . 'Cache');
-        $service->save($cachePath, 'test.cache');
+        $this->getService()->save($cachePath, 'test.cache');
 
         // Check it produces JSON
         $cacheFile = $cachePath . DIRECTORY_SEPARATOR . 'test.cache';
@@ -42,13 +46,24 @@ class WriteContentsCacheTest extends TestCase
 
     public function testPopulateFailsIfDirectoryDoesNotExist()
     {
-        $service = new WriteContentsCache(new FileOperationFactory());
-        $service->create($this->getNewTempDir(__DIR__));
-        $this->markTestIncomplete();
+        // Get the dir name wrong
+        $dirPath = $this->getNewTempDir(__FUNCTION__);
+        $this->getService()->create($dirPath . '2');
+
+        // This fails, so let's mark it
+        $this->fail('Need to get the create() method to throw exception');
     }
 
     public function testPopulateAndSaveEndToEnd()
     {
         $this->markTestIncomplete();
+    }
+
+    /**
+     * @return WriteContentsCache
+     */
+    protected function getService(): WriteContentsCache
+    {
+        return $this->service;
     }
 }
