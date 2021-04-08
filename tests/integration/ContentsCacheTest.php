@@ -4,7 +4,6 @@ namespace MusicSync\Test\Integration;
 
 use MusicSync\Service\FileOperation\ContentsCache;
 use MusicSync\Service\FileOperation\Directory;
-use MusicSync\Service\FileOperation\File;
 use MusicSync\Service\FileOperation\FileLike;
 use MusicSync\Service\FileOperation\FsObject;
 use MusicSync\Test\TestCase;

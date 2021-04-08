@@ -15,6 +15,11 @@ class WriteContentsCache
         $this->factory = $factory;
     }
 
+    /**
+     * @todo Remove this, throw an error if it doesn't exist
+     * @param string $dirPath
+     * @return bool
+     */
     public function dirExists(string $dirPath)
     {
         $dir = $this->getFactory()->createDirectory($dirPath);
