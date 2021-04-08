@@ -5,6 +5,7 @@ namespace MusicSync\Test\Integration;
 use MusicSync\Service\FileOperation\Factory as FileOperationFactory;
 use MusicSync\Service\WriteContentsCache;
 use MusicSync\Test\TestCase;
+use RuntimeException;
 
 class WriteContentsCacheTest extends TestCase
 {
@@ -34,12 +35,21 @@ class WriteContentsCacheTest extends TestCase
 
     public function testPopulateFailsIfDirectoryDoesNotExist()
     {
-        // Get the dir name wrong
         $dirPath = $this->getNewTempDir(__FUNCTION__);
-        $this->getService()->create($dirPath . '2');
 
-        // This fails, so let's mark it
-        $this->fail('Need to get the create() method to throw exception');
+        // Get the dir name wrong
+        $failed = false;
+        try {
+            $this->getService()->create($dirPath . '2');
+        }
+        catch (RuntimeException $e) {
+            $failed = true;
+        }
+
+        $this->assertTrue(
+            $failed,
+            'Expecting an exception to be thrown'
+        );
     }
 
     public function testPopulateAndSaveEndToEnd()

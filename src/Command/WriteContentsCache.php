@@ -4,6 +4,7 @@ namespace MusicSync\Command;
 
 use MusicSync\Service\FileOperation\Factory as FileOperationFactory;
 use MusicSync\Service\WriteContentsCache as WriteContentsCacheService;
+use RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -62,12 +63,17 @@ class WriteContentsCache extends Base
             return self::FAILURE;
         }
 
-        $service = $this->getWriteContentsCacheService();
-        $service->create($path);
-        $service->save($this->getCachePath(), $name);
+        try {
+            $service = $this->getWriteContentsCacheService();
+            $service->create($path);
+            $service->save($this->getCachePath(), $name);
+            $return = self::SUCCESS;
+        } catch (RuntimeException $e) {
+            $this->writeln('<error>' . $e->getMessage() . '</error>');
+            $return = self::FAILURE;
+        }
 
-        // @todo We need to determine if everything went ok
-        return self::SUCCESS;
+        return $return;
     }
 
     protected function validateArguments(string $name, string $path)
@@ -75,10 +81,6 @@ class WriteContentsCache extends Base
         // FIXME
         if (false) {
             $this->failInvalidName();
-        }
-
-        if (!$this->getWriteContentsCacheService()->dirExists($path)) {
-            return 'No such folder';
         }
 
         return null;

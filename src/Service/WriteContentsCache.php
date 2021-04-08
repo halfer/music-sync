@@ -16,26 +16,22 @@ class WriteContentsCache
     }
 
     /**
-     * @todo Remove this, throw an error if it doesn't exist
-     * @param string $dirPath
-     * @return bool
-     */
-    public function dirExists(string $dirPath)
-    {
-        $dir = $this->getFactory()->createDirectory($dirPath);
-
-        return $dir->exists();
-    }
-
-    /**
      * Creates an in-memory index of the specified directory
      *
-     * @todo Return boolean success
+     * @todo Throw a custom error rather than RuntimeException
      * @param string $dirPath
      */
     public function create(string $dirPath)
     {
+        // Throw exception if the dir does not exist
         $dir = $this->getFactory()->createDirectory($dirPath);
+        if (!$dir->exists()) {
+            throw new \RuntimeException(
+                'Directory does not exist'
+            );
+        }
+
+        // Now populate the dir memory structure
         $dir->recursivePopulate(true);
         $this->directory = $dir;
     }
