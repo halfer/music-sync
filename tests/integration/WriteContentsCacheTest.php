@@ -53,6 +53,16 @@ class WriteContentsCacheTest extends TestCase
         );
     }
 
+    public function testDirectoryTraversalNotAllowedInName()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testDirectorySeparatorNotAllowedInName()
+    {
+        $this->markTestIncomplete();
+    }
+
     public function testSaveEncountersPermissionError()
     {
         // Create in-memory structure
