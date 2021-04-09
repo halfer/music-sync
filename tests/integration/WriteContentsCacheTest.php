@@ -43,6 +43,32 @@ class WriteContentsCacheTest extends TestCase
             $this->getService()->create($dirPath . '2');
         }
         catch (RuntimeException $e) {
+            // @todo Only flip the flag if the error is correct
+            $failed = true;
+        }
+
+        $this->assertTrue(
+            $failed,
+            'Expecting an exception to be thrown'
+        );
+    }
+
+    public function testSaveEncountersPermissionError()
+    {
+        // Create in-memory structure
+        $dirPath = $this->getNewTempDir(__FUNCTION__);
+        $this->setUpRecursiveTestStructure(__FUNCTION__);
+        $this->getService()->create($dirPath);
+
+        // Writing a file should fail here
+        $cachePath = $this->getNewTempDir(__FUNCTION__ . 'Cache');
+        chmod($cachePath, 0100);
+
+        $failed = false;
+        try {
+            $this->getService()->save($cachePath, 'test.cache');
+        } catch (RuntimeException $e) {
+            // @todo Only flip the flag if the error is correct
             $failed = true;
         }
 

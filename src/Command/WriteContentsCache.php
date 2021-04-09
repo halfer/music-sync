@@ -50,6 +50,15 @@ class WriteContentsCache extends Base
         );
     }
 
+
+    /**
+     * Runs the "WriteContentsCache" command
+     *
+     * @todo Can the error display be improved
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // Get args and see if they are acceptable
@@ -57,7 +66,6 @@ class WriteContentsCache extends Base
         $path = $input->getArgument('path');
         $error = $this->validateArguments($name, $path);
 
-        // @todo This is not a very nice error display - can we do better?
         if ($error) {
             $output->writeln('<error>Error: ' . $error . '</error>');
             return self::FAILURE;
@@ -76,6 +84,12 @@ class WriteContentsCache extends Base
         return $return;
     }
 
+    /**
+     * @todo Reject if name contains ..
+     * @param string $name
+     * @param string $path
+     * @return null
+     */
     protected function validateArguments(string $name, string $path)
     {
         // FIXME
