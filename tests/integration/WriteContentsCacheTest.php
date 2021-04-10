@@ -72,12 +72,42 @@ class WriteContentsCacheTest extends TestCase
 
     public function testDirectoryTraversalNotAllowedInName()
     {
+        $cachePath = $this->getNewTempDir(__FUNCTION__ . 'Cache');
+        $failed = false;
+        try {
+            $this->getService()->save($cachePath, 'test..cache');
+        } catch (RuntimeException $e) {
+            if ($e->getMessage() === 'Names cannot contain directory traversal strings') {
+                $failed = true;
+            }
+        }
+
+        $this->assertTrue($failed);
+    }
+
+    public function testDirectorySeparatorNotAllowedInName1()
+    {
+        $cachePath = $this->getNewTempDir(__FUNCTION__ . 'Cache');
+        $failed = false;
+        try {
+            $this->getService()->save($cachePath, '/test.cache');
+        } catch (RuntimeException $e) {
+            if ($e->getMessage() === 'Names cannot contain back or forward slashes') {
+                $failed = true;
+            }
+        }
+
+        $this->assertTrue($failed);
+    }
+
+    public function testDirectorySeparatorNotAllowedInName2()
+    {
         $this->markTestIncomplete();
     }
 
-    public function testDirectorySeparatorNotAllowedInName()
+    protected function runDisallowedSaveName()
     {
-        $this->markTestIncomplete();
+
     }
 
     /**

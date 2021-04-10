@@ -46,12 +46,15 @@ class WriteContentsCache
      */
     public function save(string $cachePath, string $name)
     {
+        // We get the cache path first to capture any name errors early
+        $cacheFile = $this->getCachePath($cachePath, $name);
+
+        // Now we serialise the directory structure we've build in memory
         $cache = $this->getFactory()->createContentsCache();
         $data = $cache->serialise($this->getDirectory()->getContents());
 
+        // ... and here we commit it to disk
         $this->createCacheDirectory($cachePath);
-        $cacheFile = $this->getCachePath($cachePath, $name);
-
         $file = $this->getFactory()->createFile($cacheFile);
         $file->putContents($data);
     }
@@ -69,6 +72,21 @@ class WriteContentsCache
 
     protected function getCachePath(string $cachePath, string $name): string
     {
+        // Do some validation on the name
+        if (str_contains($name, '..')) {
+            throw new RuntimeException(
+                'Names cannot contain directory traversal strings'
+            );
+        }
+
+        foreach (['\\', '/'] as $sep) {
+            if (str_contains($name, $sep)) {
+                throw new RuntimeException(
+                    'Names cannot contain back or forward slashes'
+                );
+            }
+        }
+
         return $cachePath . DIRECTORY_SEPARATOR . $name;
     }
 
