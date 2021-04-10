@@ -109,7 +109,7 @@ class WriteContentsCache extends Base
         return $this->getHomeDir() . DIRECTORY_SEPARATOR . '.music-sync';
     }
 
-    protected function getWriteContentsCacheService()
+    protected function getWriteContentsCacheService(): WriteContentsCacheService
     {
         return $this->writeContentsCacheService;
     }
