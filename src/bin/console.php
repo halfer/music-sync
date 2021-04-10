@@ -3,12 +3,14 @@
 $projectRoot = realpath(__DIR__ . '/../..');
 require_once $projectRoot . '/vendor/autoload.php';
 
-use Symfony\Component\Console\Application;
+use MusicSync\Command\SyncFiles;
 use MusicSync\Command\WriteContentsCache;
+use Symfony\Component\Console\Application;
 
 // Add the command list here
 $classes = [
     WriteContentsCache::class,
+    SyncFiles::class,
 ];
 
 // Get env vars etc here
