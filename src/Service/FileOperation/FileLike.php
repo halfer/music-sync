@@ -6,9 +6,22 @@ use RuntimeException;
 
 trait FileLike
 {
-    public function isWriteable()
+    public function isWriteable(): bool
     {
-        return is_writeable($this->getPath() . DIRECTORY_SEPARATOR . $this->getName());
+        $filePath = $this->getPath() . DIRECTORY_SEPARATOR . $this->getName();
+
+        // is_writeable() needs the file to exist...
+        if (file_exists($filePath)) {
+            $writeable = is_writeable($filePath);
+        // ... so if it doesn't exist we check the writeability of the parent
+        } elseif (file_exists($this->getPath())) {
+            $writeable = is_writeable($this->getPath());
+        } else {
+            // ... and if that does not exist, something is very wrong!
+            throw new RuntimeException('Parent folder does not exist');
+        }
+
+        return $writeable;
     }
 
     protected function nameContainsTrailingSeparator(string $name)
