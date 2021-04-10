@@ -4,6 +4,7 @@ namespace MusicSync\Service;
 
 use MusicSync\Service\FileOperation\Directory;
 use MusicSync\Service\FileOperation\Factory as FileOperationFactory;
+use RuntimeException;
 
 class WriteContentsCache
 {
@@ -26,7 +27,7 @@ class WriteContentsCache
         // Throw exception if the dir does not exist
         $dir = $this->getFactory()->createDirectory($dirPath);
         if (!$dir->exists()) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'Directory does not exist'
             );
         }
@@ -57,6 +58,12 @@ class WriteContentsCache
 
     protected function getDirectory(): Directory
     {
+        if (!isset($this->directory)) {
+            throw new RuntimeException(
+                'Populate the cache before trying to save it'
+            );
+        }
+
         return $this->directory;
     }
 

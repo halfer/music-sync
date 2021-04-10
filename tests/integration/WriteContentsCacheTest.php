@@ -55,6 +55,21 @@ class WriteContentsCacheTest extends TestCase
         );
     }
 
+    public function testSaveBeforePopulationNotAllowed()
+    {
+        $cachePath = $this->getNewTempDir(__FUNCTION__ . 'Cache');
+
+        $failed = false;
+        try {
+            $this->getService()->save($cachePath, 'test.cache');
+        } catch (RuntimeException $e) {
+            if ($e->getMessage() === 'Populate the cache before trying to save it') {
+                $failed = true;
+            }
+        }
+        $this->assertTrue($failed);
+    }
+
     public function testDirectoryTraversalNotAllowedInName()
     {
         $this->markTestIncomplete();
