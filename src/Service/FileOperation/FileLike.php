@@ -6,6 +6,11 @@ use RuntimeException;
 
 trait FileLike
 {
+    public function isWriteable()
+    {
+        return is_writeable($this->getPath() . DIRECTORY_SEPARATOR . $this->getName());
+    }
+
     protected function nameContainsTrailingSeparator(string $name)
     {
         $lastChar = substr($name, -1, 1);

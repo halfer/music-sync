@@ -2,7 +2,10 @@
 
 namespace MusicSync\Test\Integration;
 
+use MusicSync\Service\FileOperation\Exception\Permission as PermissionException;
 use MusicSync\Service\FileOperation\Factory as FileOperationFactory;
+use MusicSync\Service\FileOperation\File;
+use MusicSync\Service\FileOperation\Directory;
 use MusicSync\Service\WriteContentsCache;
 use MusicSync\Test\TestCase;
 use RuntimeException;
@@ -43,8 +46,7 @@ class WriteContentsCacheTest extends TestCase
             $this->getService()->create($dirPath . '2');
         }
         catch (RuntimeException $e) {
-            // @todo Only flip the flag if the error is correct
-            $failed = true;
+            $failed = ($e->getMessage() === 'Directory does not exist');
         }
 
         $this->assertTrue(
@@ -63,22 +65,29 @@ class WriteContentsCacheTest extends TestCase
         $this->markTestIncomplete();
     }
 
+    /**
+     * Ah, we have a problem emulating permission issues here
+     *
+     * @todo Create a special permission error and get File to raise it
+     * @todo Create a custom File that raises a permission exception in putContents
+     * @todo Create a custom factory that uses the custom File class
+     */
     public function testSaveEncountersPermissionError()
     {
+        // Create test harness service
+        $service = new WriteContentsCache(new FactoryTestHarness());
+
         // Create in-memory structure
         $dirPath = $this->getNewTempDir(__FUNCTION__);
         $this->setUpRecursiveTestStructure(__FUNCTION__);
-        $this->getService()->create($dirPath);
+        $service->create($dirPath);
 
-        // Writing a file should fail here
         $cachePath = $this->getNewTempDir(__FUNCTION__ . 'Cache');
-        chmod($cachePath, 0100);
-
         $failed = false;
         try {
-            $this->getService()->save($cachePath, 'test.cache');
-        } catch (RuntimeException $e) {
-            // @todo Only flip the flag if the error is correct
+            // Writing a file should fail here
+            $service->save($cachePath, 'test.cache');
+        } catch (PermissionException $e) {
             $failed = true;
         }
 
@@ -117,5 +126,43 @@ class WriteContentsCacheTest extends TestCase
     protected function getService(): WriteContentsCache
     {
         return $this->service;
+    }
+}
+
+/**
+ * Special File class that can emulate a permission exception
+ */
+class FileTestHarness extends File
+{
+    protected bool $permissionError = false;
+
+    public function emulatePermissionError()
+    {
+        $this->permissionError = true;
+    }
+
+    public function putContents(string $data)
+    {
+        if ($this->permissionError) {
+            throw new PermissionException(
+                'Emulated permission error'
+            );
+        }
+
+        return parent::putContents($data);
+    }
+}
+
+/**
+ * Special Factory that creates an explosive File class :=)
+ */
+class FactoryTestHarness extends FileOperationFactory
+{
+    public function createFile(string $name, Directory $parent = null): File
+    {
+        $file = new FileTestHarness($name, $parent);
+        $file->emulatePermissionError();
+
+        return $file;
     }
 }
