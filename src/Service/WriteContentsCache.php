@@ -37,17 +37,33 @@ class WriteContentsCache
         $this->directory = $dir;
     }
 
+    public function validateName(string $name)
+    {
+        if (str_contains($name, '..')) {
+            throw new RuntimeException(
+                'Names cannot contain directory traversal strings'
+            );
+        }
+
+        foreach (['\\', '/'] as $sep) {
+            if (str_contains($name, $sep)) {
+                throw new RuntimeException(
+                    'Names cannot contain back or forward slashes'
+                );
+            }
+        }
+    }
+
     /**
      * Saves a string representation of the in-memory index
      *
-     * @todo Return boolean success
      * @param string $cachePath
      * @param string $name
      */
     public function save(string $cachePath, string $name)
     {
-        // We get the cache path first to capture any name errors early
-        $cacheFile = $this->getCachePath($cachePath, $name);
+        // Handle any name errors early
+        $this->validateName($name);
 
         // Now we serialise the directory structure we've build in memory
         $cache = $this->getFactory()->createContentsCache();
@@ -55,7 +71,7 @@ class WriteContentsCache
 
         // ... and here we commit it to disk
         $this->createCacheDirectory($cachePath);
-        $file = $this->getFactory()->createFile($cacheFile);
+        $file = $this->getFactory()->createFile($this->getCachePath($cachePath, $name));
         $file->putContents($data);
     }
 
@@ -72,21 +88,6 @@ class WriteContentsCache
 
     protected function getCachePath(string $cachePath, string $name): string
     {
-        // Do some validation on the name
-        if (str_contains($name, '..')) {
-            throw new RuntimeException(
-                'Names cannot contain directory traversal strings'
-            );
-        }
-
-        foreach (['\\', '/'] as $sep) {
-            if (str_contains($name, $sep)) {
-                throw new RuntimeException(
-                    'Names cannot contain back or forward slashes'
-                );
-            }
-        }
-
         return $cachePath . DIRECTORY_SEPARATOR . $name;
     }
 

@@ -54,26 +54,26 @@ class WriteContentsCache extends Base
     /**
      * Runs the "WriteContentsCache" command
      *
-     * @todo Can the error display be improved
+     * @todo What happens if "path" contains rubbish?
+     *
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // Get args and see if they are acceptable
-        $name = $input->getArgument('name');
-        $path = $input->getArgument('path');
-        $error = $this->validateArguments($name, $path);
-
-        if ($error) {
-            $output->writeln('<error>Error: ' . $error . '</error>');
-            return self::FAILURE;
-        }
+        $service = $this->getWriteContentsCacheService();
 
         try {
-            $service = $this->getWriteContentsCacheService();
+            // Get args and validate what we can
+            $name = $input->getArgument('name');
+            $path = $input->getArgument('path');
+            $service->validateName($name);
+
+            // Populate the in-memory structure
             $service->create($path);
+
+            // Serialise it and save it to disk
             $service->save($this->getCachePath(), $name);
             $return = self::SUCCESS;
         } catch (RuntimeException $e) {
@@ -82,27 +82,6 @@ class WriteContentsCache extends Base
         }
 
         return $return;
-    }
-
-    /**
-     * @todo Reject if name contains ..
-     * @param string $name
-     * @param string $path
-     * @return null
-     */
-    protected function validateArguments(string $name, string $path)
-    {
-        // FIXME
-        if (false) {
-            $this->failInvalidName();
-        }
-
-        return null;
-    }
-
-    protected function failInvalidName()
-    {
-
     }
 
     /**
