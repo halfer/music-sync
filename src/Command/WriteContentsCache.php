@@ -65,6 +65,8 @@ class WriteContentsCache extends Base
         $service = $this->getWriteContentsCacheService();
 
         try {
+            $this->checkForUnsupportedOptions($input);
+
             // Get args and validate what we can
             $name = $input->getArgument('name');
             $path = $input->getArgument('path');
@@ -77,11 +79,22 @@ class WriteContentsCache extends Base
             $service->save($this->getCachePath(), $name);
             $return = self::SUCCESS;
         } catch (RuntimeException $e) {
-            $this->writeln('<error>' . $e->getMessage() . '</error>');
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
             $return = self::FAILURE;
         }
 
         return $return;
+    }
+
+    /**
+     * @todo This needs to be implemented & removed
+     * @param InputInterface $input
+     */
+    protected function checkForUnsupportedOptions(InputInterface $input)
+    {
+        if ($input->getOption('cache-dir')) {
+            throw new RuntimeException('--cache-dir is currently not supported');
+        }
     }
 
     /**
