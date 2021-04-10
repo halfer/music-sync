@@ -72,42 +72,42 @@ class WriteContentsCacheTest extends TestCase
 
     public function testDirectoryTraversalNotAllowedInName()
     {
-        $cachePath = $this->getNewTempDir(__FUNCTION__ . 'Cache');
-        $failed = false;
-        try {
-            $this->getService()->save($cachePath, 'test..cache');
-        } catch (RuntimeException $e) {
-            if ($e->getMessage() === 'Names cannot contain directory traversal strings') {
-                $failed = true;
-            }
-        }
-
-        $this->assertTrue($failed);
+        $this->runDisallowedSaveName(
+            'test..cache',
+            'Names cannot contain directory traversal strings'
+        );
     }
 
     public function testDirectorySeparatorNotAllowedInName1()
     {
-        $cachePath = $this->getNewTempDir(__FUNCTION__ . 'Cache');
-        $failed = false;
-        try {
-            $this->getService()->save($cachePath, '/test.cache');
-        } catch (RuntimeException $e) {
-            if ($e->getMessage() === 'Names cannot contain back or forward slashes') {
-                $failed = true;
-            }
-        }
-
-        $this->assertTrue($failed);
+        $this->runDisallowedSaveName(
+            '/test.cache',
+            'Names cannot contain back or forward slashes'
+        );
     }
 
     public function testDirectorySeparatorNotAllowedInName2()
     {
-        $this->markTestIncomplete();
+        $this->runDisallowedSaveName(
+            '\\test.cache',
+            'Names cannot contain back or forward slashes'
+        );
     }
 
-    protected function runDisallowedSaveName()
+    protected function runDisallowedSaveName(string $cacheName, string $expectedException)
     {
+        $cachePath = $this->getNewTempDir(__FUNCTION__ . 'Cache');
+        $failed = false;
+        try {
+            $this->getService()->save($cachePath, $cacheName);
+        } catch (RuntimeException $e) {
+            $failed = ($e->getMessage() === $expectedException);
+        }
 
+        $this->assertTrue(
+            $failed,
+            'Expecting an exception to be thrown'
+        );
     }
 
     /**
