@@ -30,21 +30,39 @@ class SyncFiles
         return $this;
     }
 
+    /**
+     * Determines if the action is to be carried out or just described
+     *
+     * @param bool $dryRun
+     */
     public function setDryRun(bool $dryRun)
     {
         // @todo
     }
 
+    /**
+     * Determines if files can be deleted on the destination
+     *
+     * @param bool $deleteDest
+     */
     public function setDeleteDestinationFiles(bool $deleteDest)
     {
         // @todo
     }
 
-    public function setNoInterativeDelete(bool $noInteractive)
+    /**
+     * Determines if deletions use a console prompt
+     *
+     * @param bool $noInteractive
+     */
+    public function setNoInteractiveDelete(bool $noInteractive)
     {
         // @todo
     }
 
+    /**
+     * Main service entrypoint
+     */
     public function sync()
     {
         // @todo
