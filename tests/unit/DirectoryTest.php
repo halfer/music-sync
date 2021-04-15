@@ -5,6 +5,7 @@ namespace MusicSync\Test\Unit;
 use MusicSync\Service\FileOperation\Directory;
 use MusicSync\Service\FileOperation\File;
 use MusicSync\Service\FileOperation\FsObject;
+use MusicSync\Test\DirectoryTestHarness;
 use MusicSync\Test\TestCase;
 
 class DirectoryTest extends TestCase
@@ -155,19 +156,5 @@ class DirectoryTest extends TestCase
         }
 
         return $list;
-    }
-}
-
-/**
- * Not everyone likes this form of testing - tampering with the public
- * nature of methods to expose inner workings. But I think it is pretty
- * harmless in this case.
- */
-class DirectoryTestHarness extends Directory
-{
-    public function pushObjectPublic(FsObject $object)
-    {
-        $this->contents[] = $object;
-        $this->setPopulated();
     }
 }
