@@ -1,6 +1,7 @@
 <?php
 
 namespace MusicSync\Test;
+
 use MusicSync\Service\FileOperation\Directory;
 use MusicSync\Service\FileOperation\File;
 use PHPUnit\Framework\TestCase as BaseTestCase;
