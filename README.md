@@ -15,7 +15,7 @@ or ping me an email via my blog. I may finish it, I may not - watch this space!
 Features
 ---
 
-* Generate Listing - do I generate listings caches separately? Offer --for-source and --for-dest options
+* Generate Listing - generate listings caches separately
 
 * Diff - just runs a diff for the specified env
 
@@ -28,13 +28,18 @@ Features
 Todo
 ---
 
+* Start on the Sync command
+* Add from-name and to-name arguments
+* Scan LTR to produce a list of files to copy
+* Scan TRL to produce a list of files to delete
+
+Low priority todo
+---
+
 * Implement --cache-dir for WriteContentsCache
-* Implement validateArguments for WriteContentsCache
-* Write a directory cache
 * Add progress device to recursive Directory populator (DFS)
 * Can we add a BFS progress device too?
 * Add a Symfony bar device to the Generate Listing command
-* Add a factory to Directory
 
 Done
 ---
@@ -43,3 +48,5 @@ Done
 * Recursive object counter
 * Recursive file total scanner
 * Add sorter device to Directory class
+* Implement validateArguments for WriteContentsCache
+* Write a directory cache
