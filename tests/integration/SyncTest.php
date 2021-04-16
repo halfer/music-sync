@@ -3,22 +3,37 @@
 namespace MusicSync\Test\Integration;
 
 use MusicSync\Service\FileOperation\File;
+use MusicSync\Service\SyncFiles;
 use MusicSync\Test\DirectoryTestHarness as TestDirectory;
 use MusicSync\Test\TestCase;
-use PHPUnit\Util\Test;
 
 class SyncTest extends TestCase
 {
+    protected TestFileOperationFactory $factory;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->factory = new TestFileOperationFactory();
+    }
+
     public function testSimpleCase()
     {
-        // Just making sure they run at the mo!
-        $this->createStructure1();
-        $this->createStructure2();
+        // Build some dir structures in memory
+        $source = $this->createStructure1();
+        $dest = $this->createStructure2();
+
+        // Insert them into the sync system
+        $sut = new SyncFiles($this->factory);
+        $sut
+            ->setSourceDirectory($source)
+            ->setDestinationDirectory($dest);
 
         $this->markTestIncomplete();
     }
 
-    protected function createStructure1()
+    protected function createStructure1(): TestDirectory
     {
         // Upper level objects
         $dirD = new TestDirectory('/home/person/d');
@@ -43,9 +58,11 @@ class SyncTest extends TestCase
             $dirE,
             new TestDirectory('f'),
         ]);
+
+        return $dir;
     }
 
-    protected function createStructure2()
+    protected function createStructure2(): TestDirectory
     {
         // Upper level objects
         $dirD = new TestDirectory('/home/person/d');
@@ -64,11 +81,17 @@ class SyncTest extends TestCase
             // Missing dir "e"
             new TestDirectory('f'),
         ]);
+
+        return $dir;
     }
 
-    protected function createBaseDirectory()
+    protected function createBaseDirectory(): TestDirectory
     {
-        return new TestDirectory('/home/person');
+        // Injects a factory that always creates test directories :=)
+        $dir = new TestDirectory('/home/person');
+        $dir->setFactory($this->factory);
+
+        return $dir;
     }
 
     // @todo Remove this and move calls above to class copy
