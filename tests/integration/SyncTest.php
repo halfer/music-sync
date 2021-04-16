@@ -37,12 +37,12 @@ class SyncTest extends TestCase
     {
         // Upper level objects
         $dirD = new TestDirectory('/home/person/d');
-        $this->pushObjects($dirD, [
+        $dirD->pushObjects([
             new File('d-a'),
             new File('d-c'),
         ]);
         $dirE = new TestDirectory('/home/person/e');
-        $this->pushObjects($dirE, [
+        $dirE->pushObjects([
             new File('e-a'),
             new File('e-b'),
             new File('e-c'),
@@ -50,7 +50,7 @@ class SyncTest extends TestCase
 
         // Main level objects
         $dir = $this->createBaseDirectory();
-        $this->pushObjects($dir, [
+        $dir->pushObjects([
             new File('a'),
             new File('b'),
             // Missing file "c"
@@ -66,14 +66,14 @@ class SyncTest extends TestCase
     {
         // Upper level objects
         $dirD = new TestDirectory('/home/person/d');
-        $this->pushObjects($dirD, [
+        $dirD->pushObjects([
             new File('d-a'),
             new File('d-b'),
         ]);
 
         // Main level objects
         $dir = $this->createBaseDirectory();
-        $this->pushObjects($dir, [
+        $dir->pushObjects([
             new File('a'),
             // Missing file "b"
             new File('c'),
@@ -92,13 +92,5 @@ class SyncTest extends TestCase
         $dir->setFactory($this->factory);
 
         return $dir;
-    }
-
-    // @todo Remove this and move calls above to class copy
-    protected function pushObjects(TestDirectory $directory, array $fsObjects)
-    {
-        foreach ($fsObjects as $fsObject) {
-            $directory->pushObjectPublic($fsObject);
-        }
     }
 }

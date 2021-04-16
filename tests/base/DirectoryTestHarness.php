@@ -17,4 +17,11 @@ class DirectoryTestHarness extends Directory
         $this->contents[] = $object;
         $this->setPopulated();
     }
+
+    public function pushObjects(array $fsObjects)
+    {
+        foreach ($fsObjects as $fsObject) {
+            $this->pushObjectPublic($fsObject);
+        }
+    }
 }
