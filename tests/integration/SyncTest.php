@@ -18,7 +18,7 @@ class SyncTest extends TestCase
         $this->factory = new TestFileOperationFactory();
     }
 
-    public function testSimpleCase()
+    public function testSimpleSyncCase()
     {
         // Build some dir structures in memory
         $source = $this->createStructure1();
@@ -28,7 +28,8 @@ class SyncTest extends TestCase
         $sut = new SyncFiles($this->factory);
         $sut
             ->setSourceDirectory($source)
-            ->setDestinationDirectory($dest);
+            ->setDestinationDirectory($dest)
+            ->sync();
 
         $this->markTestIncomplete();
     }
@@ -56,7 +57,7 @@ class SyncTest extends TestCase
             // Missing file "c"
             $dirD,
             $dirE,
-            new TestDirectory('f'),
+            new TestDirectory('/home/person/f'),
         ]);
 
         return $dir;
@@ -79,7 +80,7 @@ class SyncTest extends TestCase
             new File('c'),
             $dirD,
             // Missing dir "e"
-            new TestDirectory('f'),
+            new TestDirectory('/home/person/f'),
         ]);
 
         return $dir;

@@ -4,6 +4,7 @@ namespace MusicSync\Service;
 
 use MusicSync\Service\FileOperation\Directory;
 use MusicSync\Service\FileOperation\Factory as FileOperationFactory;
+use MusicSync\Service\FileOperation\FsObject;
 
 class SyncFiles
 {
@@ -65,6 +66,35 @@ class SyncFiles
      */
     public function sync()
     {
-        // @todo
+        // @todo Just demo code for now
+        // @todo Give all objects in the struct the same parent folder
+        // @todo Why is the recursion not working?
+        echo "\n";
+        foreach ($this->iterator($this->sourceDirectory) as $fsObject) {
+            /* @var $fsObject FsObject */
+            $type = str_replace(
+                ['MusicSync\\Service\\', 'MusicSync\\Test\\', ],
+                '',
+                get_class($fsObject));
+            echo $type . ' : path=' . $fsObject->getPath() . '; name=' . $fsObject->getName() . "\n";
+        }
+    }
+
+    /**
+     * I am pondering here using a generator and yielding each item. This will
+     * allow me to recursively explore two directories at the same time, stopping
+     * one of them if the other one has extra objects.
+     *
+     * @todo Rewrite these comments when we're done
+     */
+    public function iterator(Directory $directory)
+    {
+        foreach ($directory->getContents() as $fsObject) {
+            /* @var $fsObject FsObject */
+            yield $fsObject;
+            if ($fsObject instanceof Directory) {
+                $this->iterator($fsObject);
+            }
+        }
     }
 }
