@@ -18,6 +18,22 @@ class SyncTest extends TestCase
         $this->factory = new TestFileOperationFactory();
     }
 
+    public function testSimpleSyncNullCase()
+    {
+        // Build two identical dir structures in memory
+        $source = $this->createStructure1();
+        $dest = $this->createStructure1();
+
+        // Insert them into the sync system
+        $sut = new SyncFiles($this->factory);
+        $sut
+            ->setSourceDirectory($source)
+            ->setDestinationDirectory($dest)
+            ->sync();
+
+        $this->markTestIncomplete();
+    }
+
     public function testSimpleSyncCase()
     {
         // Build some dir structures in memory

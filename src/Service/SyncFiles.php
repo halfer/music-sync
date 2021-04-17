@@ -63,26 +63,11 @@ class SyncFiles
 
     /**
      * Main service entrypoint
+     *
+     * @todo Just demo code for now
      */
     public function sync()
     {
-        // @todo Just demo code for now
-
-        #echo "\n";
-        foreach ($this->iterator($this->sourceDirectory) as $fsObject) {
-            /* @var $fsObject FsObject */
-            $type = str_replace(
-                ['MusicSync\\Service\\', 'MusicSync\\Test\\', ],
-                '',
-                get_class($fsObject));
-            #echo $type . ' : path=' . $fsObject->getPath() .
-            #    '; name=' . $fsObject->getName() .
-            #    "\n";
-        }
-
-        // @todo More demo code
-        return;
-
         // Let's create two iterators we can compare
         $sourceList = $this->iterator($this->sourceDirectory);
         $destList = $this->iterator($this->destinationDirectory);
@@ -91,6 +76,11 @@ class SyncFiles
         $dest = current($destList);
         /* @var $source FsObject */
         /* @var $dest FsObject */
+
+        echo $source ? 'Source OK' : 'Source finished';
+        echo "\n";
+        echo $dest ? 'Dest OK' : 'Dest finished';
+        echo "\n";
 
         // Get sizes
         $sourceSize = $this->getObjectSize($source);
@@ -104,10 +94,31 @@ class SyncFiles
             if ($sameSize) {
                 // Skip
             } else {
-                // File/link copy
+                // File/link copy or delete
             }
+        } elseif ($sameLevel) {
+            // Same level - object copy or delete
+            // Then advance that generator by one
         } else {
+            // New unexpected level
+        }
+    }
 
+    /**
+     * @todo Remove this demo code?
+     */
+    protected function iterateOverSourceDir()
+    {
+        echo "\n";
+        foreach ($this->iterator($this->sourceDirectory) as $fsObject) {
+            /* @var $fsObject FsObject */
+            $type = str_replace(
+                ['MusicSync\\Service\\', 'MusicSync\\Test\\', ],
+                '',
+                get_class($fsObject));
+            echo $type . ' : path=' . $fsObject->getPath() .
+                '; name=' . $fsObject->getName() .
+                "\n";
         }
     }
 
