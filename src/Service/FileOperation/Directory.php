@@ -201,6 +201,53 @@ class Directory extends FsObject
         return $count;
     }
 
+    /**
+     * Gets path based on parent directories
+     */
+    public function getCalculatedPath()
+    {
+        $i = 0;
+        $loopLimit = 100;
+
+        $parent = $this->getParent();
+        $path = '';
+        while ($parent) {
+            // Prepend the dir name to the path
+            $path = $parent->getName() . DIRECTORY_SEPARATOR . $path;
+
+            // Bork if too many loops
+            $i++;
+            if ($i > $loopLimit) {
+                throw new RuntimeException(
+                    sprintf(
+                        'Found more than %d ancestor directories - circular reference?',
+                        $loopLimit
+                    )
+                );
+            }
+
+            // Move one level up
+            $parent = $parent->getParent();
+        }
+
+        // Now prepend the topmost path
+        $path = $path ?
+            $this->getPath() . DIRECTORY_SEPARATOR . $path :
+            $this->getPath();
+
+        return $path;
+    }
+
+    /**
+     * Walks the structure and checks parents agree with children
+     */
+    public function verifyDirectoryRelationships()
+    {
+        throw new RuntimeException(
+            'This method is not yet implemented'
+        );
+    }
+
     public function sort(string $sortType, bool $ascending = true)
     {
         $this->setSortDirection($ascending);

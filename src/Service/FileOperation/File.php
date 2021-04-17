@@ -11,14 +11,14 @@ class File extends FsObject
 
     protected int $size;
 
-    public function __construct(string $name)
+    public function __construct(string $name, Directory $parent = null)
     {
         if ($this->nameContainsTrailingSeparator($name)) {
             throw new RuntimeException(
                 'A directory separator cannot be the last character in a file'
             );
         }
-        parent::__construct($name);
+        parent::__construct($name, $parent);
     }
 
     public function putContents(string $data)
