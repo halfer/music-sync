@@ -72,8 +72,8 @@ class SyncFiles
         $sourceList = $this->iterator($this->sourceDirectory);
         $destList = $this->iterator($this->destinationDirectory);
 
-        $source = current($sourceList);
-        $dest = current($destList);
+        $source = $sourceList->current();
+        $dest = $destList->current();
         /* @var $source FsObject */
         /* @var $dest FsObject */
 
@@ -102,6 +102,10 @@ class SyncFiles
         } else {
             // New unexpected level
         }
+
+        // Use these to advance the generators
+        $source = $sourceList->next();
+        $dest = $destList->next();
     }
 
     /**
