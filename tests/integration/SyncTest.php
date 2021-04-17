@@ -36,28 +36,30 @@ class SyncTest extends TestCase
 
     protected function createStructure1(): TestDirectory
     {
+        $home = '/home/person';
+
         // Upper level objects
-        $dirD = new TestDirectory('/home/person/d');
+        $dirD = new TestDirectory($home . '/d');
         $dirD->pushObjects([
-            new File('d-a'),
-            new File('d-c'),
+            new File($home . '/d-a'),
+            new File($home . '/d-c'),
         ]);
-        $dirE = new TestDirectory('/home/person/e');
+        $dirE = new TestDirectory($home . '/e');
         $dirE->pushObjects([
-            new File('e-a'),
-            new File('e-b'),
-            new File('e-c'),
+            new File($home . '/e-a'),
+            new File($home . '/e-b'),
+            new File($home . '/e-c'),
         ]);
 
         // Main level objects
         $dir = $this->createBaseDirectory();
         $dir->pushObjects([
-            new File('a'),
-            new File('b'),
+            new File($home . '/a'),
+            new File($home . '/b'),
             // Missing file "c"
             $dirD,
             $dirE,
-            new TestDirectory('/home/person/f'),
+            new TestDirectory($home . '/f'),
         ]);
 
         return $dir;
@@ -65,22 +67,24 @@ class SyncTest extends TestCase
 
     protected function createStructure2(): TestDirectory
     {
+        $home = '/home/person';
+
         // Upper level objects
-        $dirD = new TestDirectory('/home/person/d');
+        $dirD = new TestDirectory($home . '/d');
         $dirD->pushObjects([
-            new File('d-a'),
-            new File('d-b'),
+            new File($home . '/d-a'),
+            new File($home . '/d-b'),
         ]);
 
         // Main level objects
         $dir = $this->createBaseDirectory();
         $dir->pushObjects([
-            new File('a'),
+            new File($home . '/a'),
             // Missing file "b"
-            new File('c'),
+            new File($home . '/c'),
             $dirD,
             // Missing dir "e"
-            new TestDirectory('/home/person/f'),
+            new TestDirectory($home . '/f'),
         ]);
 
         return $dir;
