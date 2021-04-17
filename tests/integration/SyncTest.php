@@ -50,6 +50,8 @@ class SyncTest extends TestCase
             new File($home . '/e-b'),
             new File($home . '/e-c'),
         ]);
+        $dirF = new TestDirectory($home . '/f');
+        $dirF->setContents([]); // Marks as populated
 
         // Main level objects
         $dir = $this->createBaseDirectory();
@@ -59,7 +61,7 @@ class SyncTest extends TestCase
             // Missing file "c"
             $dirD,
             $dirE,
-            new TestDirectory($home . '/f'),
+            $dirF,
         ]);
 
         return $dir;
@@ -75,6 +77,8 @@ class SyncTest extends TestCase
             new File($home . '/d-a'),
             new File($home . '/d-b'),
         ]);
+        $dirF = new TestDirectory($home . '/f');
+        $dirF->setContents([]); // Marks as populated
 
         // Main level objects
         $dir = $this->createBaseDirectory();
@@ -84,7 +88,7 @@ class SyncTest extends TestCase
             new File($home . '/c'),
             $dirD,
             // Missing dir "e"
-            new TestDirectory($home . '/f'),
+            $dirF,
         ]);
 
         return $dir;

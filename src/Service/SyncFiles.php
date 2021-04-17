@@ -68,15 +68,14 @@ class SyncFiles
     {
         // @todo Just demo code for now
         // @todo Give all objects in the struct the same parent folder
-        // @todo Why is the recursion not working?
-        echo "\n";
+        #echo "\n";
         foreach ($this->iterator($this->sourceDirectory) as $fsObject) {
             /* @var $fsObject FsObject */
             $type = str_replace(
                 ['MusicSync\\Service\\', 'MusicSync\\Test\\', ],
                 '',
                 get_class($fsObject));
-            echo $type . ' : path=' . $fsObject->getPath() . '; name=' . $fsObject->getName() . "\n";
+            #echo $type . ' : path=' . $fsObject->getPath() . '; name=' . $fsObject->getName() . "\n";
         }
     }
 
