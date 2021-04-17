@@ -73,15 +73,14 @@ class SyncFiles
         $sourceList = $this->iterator($this->sourceDirectory);
         $destList = $this->iterator($this->destinationDirectory);
 
-        $source = $sourceList->current();
-        $dest = $destList->current();
         /* @var $source FsObject */
         /* @var $dest FsObject */
 
         echo "\n";
-        while ($source && $dest) {
-            echo ($source ? 'Source OK' : 'Source finished') . "\n";
-            echo ($dest ? 'Dest OK' : 'Dest finished') . "\n";
+        while ($sourceList->valid() || $destList->valid()) {
+
+            $source = $sourceList->current();
+            $dest = $destList->current();
 
             if ($source && $dest) {
                 $this->caseBothExist(
@@ -89,21 +88,19 @@ class SyncFiles
                     $source, $dest
                 );
             } elseif ($source || $dest) {
-
+                echo "Should not happen yet\n";
+            } else {
+                echo "Finish condition\n";
+                break;
             }
-
-            echo ($source ? 'Source OK' : 'Source finished') . "\n";
-            echo ($dest ? 'Dest OK' : 'Dest finished') . "\n";
         }
 
         echo "Finished\n";
     }
 
     protected function caseBothExist(
-        Generator $sourceList,
-        Generator $destList,
-        FsObject &$source,
-        FsObject &$dest)
+        Generator $sourceList, Generator $destList,
+        FsObject $source, FsObject $dest)
     {
         // Get sizes
         $sourceSize = $this->getObjectSize($source);
@@ -115,18 +112,28 @@ class SyncFiles
 
         if ($sameLevel && $sameName) {
             if ($sameSize) {
-                echo "Skip, objects the same ({$source->getName()})\n";
+                $this->caseFilesIdentical($source, $dest);
             } else {
-                echo "Copy, size difference\n";
+                $this->caseFilesDiffer($source, $dest);
             }
-            $source = $sourceList->next();
-            $dest = $destList->next();
+            $sourceList->next();
+            $destList->next();
         } elseif ($sameLevel) {
             echo "Different name, need to mark item for copy/deletion\n";
         } else {
             // New unexpected level
             echo "New level detected\n";
         }
+    }
+
+    protected function caseFilesIdentical(FsObject $source, FsObject $dest)
+    {
+        echo "Skip, objects the same ({$source->getName()})\n";
+    }
+
+    protected function caseFilesDiffer(FsObject $source, FsObject $dest)
+    {
+        echo "Copy, size difference\n";
     }
 
     protected function caseOneExists()
@@ -171,6 +178,7 @@ class SyncFiles
      */
     public function iterator(Directory $directory, $level = 0)
     {
+        echo "Count: " . (count($directory->getContents())) . "\n";
         foreach ($directory->getContents() as $fsObject) {
             /* @var $fsObject FsObject */
             yield $fsObject;
