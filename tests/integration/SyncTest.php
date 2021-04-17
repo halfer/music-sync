@@ -34,6 +34,9 @@ class SyncTest extends TestCase
         $this->markTestIncomplete();
     }
 
+    /**
+     * @todo These objects fail validation, their parents are not set
+     */
     protected function createStructure1(): TestDirectory
     {
         $home = '/home/person';
@@ -67,6 +70,9 @@ class SyncTest extends TestCase
         return $dir;
     }
 
+    /**
+     * @todo These objects fail validation, their parents are not set
+     */
     protected function createStructure2(): TestDirectory
     {
         $home = '/home/person';
