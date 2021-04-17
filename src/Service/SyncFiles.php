@@ -86,14 +86,15 @@ class SyncFiles
      * one of them if the other one has extra objects.
      *
      * @todo Rewrite these comments when we're done
+     * @todo Assess whether the end solution needs $level
      */
-    public function iterator(Directory $directory)
+    public function iterator(Directory $directory, $level = 0)
     {
         foreach ($directory->getContents() as $fsObject) {
             /* @var $fsObject FsObject */
             yield $fsObject;
             if ($fsObject instanceof Directory) {
-                $this->iterator($fsObject);
+                yield from $this->iterator($fsObject, $level + 1);
             }
         }
     }
