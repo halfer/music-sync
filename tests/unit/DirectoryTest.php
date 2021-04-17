@@ -82,6 +82,24 @@ class DirectoryTest extends TestCase
         return $dir;
     }
 
+    public function testCalculatedDirectoryPath()
+    {
+        $this->markTestIncomplete();
+    }
+
+    /**
+     * Not sure if a circular reference is possible?
+     */
+    public function testDetectDirectoryCircularReference()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testVerifyDirectoryRelationships()
+    {
+        $this->markTestIncomplete();
+    }
+
     public function testSortBySizeAscending()
     {
         $dir = $this->createDemoDirForSizes();
