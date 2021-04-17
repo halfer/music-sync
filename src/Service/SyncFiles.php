@@ -67,7 +67,7 @@ class SyncFiles
     public function sync()
     {
         // @todo Just demo code for now
-        // @todo Give all objects in the struct the same parent folder
+
         #echo "\n";
         foreach ($this->iterator($this->sourceDirectory) as $fsObject) {
             /* @var $fsObject FsObject */
@@ -75,8 +75,49 @@ class SyncFiles
                 ['MusicSync\\Service\\', 'MusicSync\\Test\\', ],
                 '',
                 get_class($fsObject));
-            #echo $type . ' : path=' . $fsObject->getPath() . '; name=' . $fsObject->getName() . "\n";
+            #echo $type . ' : path=' . $fsObject->getPath() .
+            #    '; name=' . $fsObject->getName() .
+            #    "\n";
         }
+
+        // @todo More demo code
+        return;
+
+        // Let's create two iterators we can compare
+        $sourceList = $this->iterator($this->sourceDirectory);
+        $destList = $this->iterator($this->destinationDirectory);
+
+        $source = current($sourceList);
+        $dest = current($destList);
+        /* @var $source FsObject */
+        /* @var $dest FsObject */
+
+        // Get sizes
+        $sourceSize = $this->getObjectSize($source);
+        $destSize = $this->getObjectSize($dest);
+
+        $sameLevel = $source->getLevel() === $dest->getLevel();
+        $sameName = $source->getName() === $dest->getName();
+        $sameSize = $sourceSize === $destSize;
+
+        if ($sameLevel && $sameName) {
+            if ($sameSize) {
+                // Skip
+            } else {
+                // File/link copy
+            }
+        } else {
+
+        }
+    }
+
+    protected function getObjectSize(FsObject $fsObject)
+    {
+        if ($fsObject instanceof Directory) {
+            return 0;
+        }
+
+        return $fsObject->getSize();
     }
 
     /**
