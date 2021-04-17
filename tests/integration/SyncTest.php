@@ -2,6 +2,7 @@
 
 namespace MusicSync\Test\Integration;
 
+use MusicSync\Service\FileOperation\Directory;
 use MusicSync\Service\FileOperation\File;
 use MusicSync\Service\SyncFiles;
 use MusicSync\Test\DirectoryTestHarness as TestDirectory;
@@ -83,6 +84,9 @@ class SyncTest extends TestCase
             $dirF,
         ]);
 
+        // Make all file-like objects the same size
+        $this->walkStructureAndResetSizes($dir, 1);
+
         return $dir;
     }
 
@@ -123,5 +127,16 @@ class SyncTest extends TestCase
         $dir->setFactory($this->factory);
 
         return $dir;
+    }
+
+    function walkStructureAndResetSizes(Directory $d, $size) {
+        foreach ($d->getContents() as $fsObject) {
+            if (method_exists($fsObject, 'hasSize')) {
+                $fsObject->setSize($size);
+            }
+            if ($fsObject instanceof Directory) {
+                $this->walkStructureAndResetSizes($fsObject, $size);
+            }
+        }
     }
 }

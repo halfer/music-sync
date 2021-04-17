@@ -2,6 +2,7 @@
 
 namespace MusicSync\Service;
 
+use Generator;
 use MusicSync\Service\FileOperation\Directory;
 use MusicSync\Service\FileOperation\Factory as FileOperationFactory;
 use MusicSync\Service\FileOperation\FsObject;
@@ -77,35 +78,60 @@ class SyncFiles
         /* @var $source FsObject */
         /* @var $dest FsObject */
 
-        echo $source ? 'Source OK' : 'Source finished';
         echo "\n";
-        echo $dest ? 'Dest OK' : 'Dest finished';
-        echo "\n";
+        while ($source && $dest) {
+            echo ($source ? 'Source OK' : 'Source finished') . "\n";
+            echo ($dest ? 'Dest OK' : 'Dest finished') . "\n";
 
+            if ($source && $dest) {
+                $this->caseBothExist(
+                    $sourceList, $destList,
+                    $source, $dest
+                );
+            } elseif ($source || $dest) {
+
+            }
+
+            echo ($source ? 'Source OK' : 'Source finished') . "\n";
+            echo ($dest ? 'Dest OK' : 'Dest finished') . "\n";
+        }
+
+        echo "Finished\n";
+    }
+
+    protected function caseBothExist(
+        Generator $sourceList,
+        Generator $destList,
+        FsObject &$source,
+        FsObject &$dest)
+    {
         // Get sizes
         $sourceSize = $this->getObjectSize($source);
         $destSize = $this->getObjectSize($dest);
 
-        $sameLevel = $source->getLevel() === $dest->getLevel();
+        $sameLevel = true; // $source->getLevel() === $dest->getLevel();
         $sameName = $source->getName() === $dest->getName();
         $sameSize = $sourceSize === $destSize;
 
         if ($sameLevel && $sameName) {
             if ($sameSize) {
-                // Skip
+                echo "Skip, objects the same ({$source->getName()})\n";
             } else {
-                // File/link copy or delete
+                echo "Copy, size difference\n";
             }
+            $source = $sourceList->next();
+            $dest = $destList->next();
         } elseif ($sameLevel) {
-            // Same level - object copy or delete
-            // Then advance that generator by one
+            echo "Different name, need to mark item for copy/deletion\n";
         } else {
             // New unexpected level
+            echo "New level detected\n";
         }
+    }
 
-        // Use these to advance the generators
-        $source = $sourceList->next();
-        $dest = $destList->next();
+    protected function caseOneExists()
+    {
+
     }
 
     /**
