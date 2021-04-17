@@ -27,12 +27,24 @@ class SyncTest extends TestCase
 
         // Insert them into the sync system
         $sut = new SyncFiles($this->factory);
-        $sut
+        $operations = $sut
             ->setSourceDirectory($source)
             ->setDestinationDirectory($dest)
-            ->sync();
-
-        $this->markTestIncomplete();
+            ->sync()
+            ->getOperations();
+        $expected = [
+            ['type' => 'noop', 'details' => 'a and a identical'],
+            ['type' => 'noop', 'details' => 'b and b identical'],
+            ['type' => 'noop', 'details' => 'd and d identical'],
+            ['type' => 'noop', 'details' => 'd-a and d-a identical'],
+            ['type' => 'noop', 'details' => 'd-c and d-c identical'],
+            ['type' => 'noop', 'details' => 'e and e identical'],
+            ['type' => 'noop', 'details' => 'e-a and e-a identical'],
+            ['type' => 'noop', 'details' => 'e-b and e-b identical'],
+            ['type' => 'noop', 'details' => 'e-c and e-c identical'],
+            ['type' => 'noop', 'details' => 'f and f identical'],
+        ];
+        $this->assertEquals($expected, $operations);
     }
 
     public function testSimpleSyncCase()

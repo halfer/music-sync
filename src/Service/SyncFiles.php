@@ -12,6 +12,7 @@ class SyncFiles
     protected FileOperationFactory $factory;
     protected Directory $sourceDirectory;
     protected Directory $destinationDirectory;
+    protected array $operations;
 
     public function __construct(FileOperationFactory $factory)
     {
@@ -69,6 +70,8 @@ class SyncFiles
      */
     public function sync()
     {
+        $this->clearOperations();
+
         // Let's create two iterators we can compare
         $sourceList = $this->iterator($this->sourceDirectory);
         $destList = $this->iterator($this->destinationDirectory);
@@ -76,7 +79,6 @@ class SyncFiles
         /* @var $source FsObject */
         /* @var $dest FsObject */
 
-        echo "\n";
         while ($sourceList->valid() || $destList->valid()) {
 
             $source = $sourceList->current();
@@ -95,7 +97,7 @@ class SyncFiles
             }
         }
 
-        echo "Finished\n";
+        return $this;
     }
 
     protected function caseBothExist(
@@ -128,7 +130,10 @@ class SyncFiles
 
     protected function caseFilesIdentical(FsObject $source, FsObject $dest)
     {
-        echo "Skip, objects the same ({$source->getName()})\n";
+        $this->pushOperation(
+            'noop',
+            "{$source->getName()} and {$dest->getName()} identical"
+        );
     }
 
     protected function caseFilesDiffer(FsObject $source, FsObject $dest)
@@ -169,16 +174,12 @@ class SyncFiles
     }
 
     /**
-     * I am pondering here using a generator and yielding each item. This will
-     * allow me to recursively explore two directories at the same time, stopping
-     * one of them if the other one has extra objects.
+     * Recursive directory generator
      *
-     * @todo Rewrite these comments when we're done
      * @todo Assess whether the end solution needs $level
      */
     public function iterator(Directory $directory, $level = 0)
     {
-        echo "Count: " . (count($directory->getContents())) . "\n";
         foreach ($directory->getContents() as $fsObject) {
             /* @var $fsObject FsObject */
             yield $fsObject;
@@ -186,5 +187,23 @@ class SyncFiles
                 yield from $this->iterator($fsObject, $level + 1);
             }
         }
+    }
+
+    public function getOperations(): array
+    {
+        return $this->operations;
+    }
+
+    protected function clearOperations()
+    {
+        $this->operations = [];
+    }
+
+    protected function pushOperation(string $type, string $details)
+    {
+        $this->operations[] = [
+            'type' => $type,
+            'details' => $details,
+        ];
     }
 }
