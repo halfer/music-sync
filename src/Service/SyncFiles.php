@@ -121,7 +121,10 @@ class SyncFiles
             $sourceList->next();
             $destList->next();
         } elseif ($sameLevel) {
-            echo "Different name, need to mark item for copy/deletion\n";
+            $this->caseFileMissing(
+                $sourceList, $destList,
+                $source, $dest
+            );
         } else {
             // New unexpected level
             echo "New level detected\n";
@@ -141,7 +144,16 @@ class SyncFiles
         echo "Copy, size difference\n";
     }
 
-    protected function caseOneExists()
+    protected function caseFileMissing(
+        Generator $sourceList, Generator $destList,
+        FsObject $source, FsObject $dest)
+    {
+        echo "Different name, need to mark item for copy/deletion\n";
+    }
+
+    protected function caseOneExists(
+        Generator $sourceList, Generator $destList,
+        ?FsObject $source, ?FsObject $dest)
     {
 
     }

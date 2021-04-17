@@ -129,6 +129,9 @@ class SyncTest extends TestCase
             $dirF,
         ]);
 
+        // Make all file-like objects the same size
+        $this->walkStructureAndResetSizes($dir, 1);
+
         return $dir;
     }
 
