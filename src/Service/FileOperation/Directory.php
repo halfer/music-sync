@@ -239,6 +239,22 @@ class Directory extends FsObject
     }
 
     /**
+     * Recursive directory generator
+     *
+     * @todo Assess whether the end solution needs $level
+     */
+    public function iterator($level = 0)
+    {
+        foreach ($this->getContents() as $fsObject) {
+            /* @var $fsObject FsObject */
+            yield $fsObject;
+            if ($fsObject instanceof Directory) {
+                yield from $fsObject->iterator($level + 1);
+            }
+        }
+    }
+
+    /**
      * Walks the structure and checks parents agree with children
      */
     public function verifyDirectoryRelationships()

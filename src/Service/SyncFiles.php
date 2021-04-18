@@ -73,8 +73,8 @@ class SyncFiles
         $this->clearOperations();
 
         // Let's create two iterators we can compare
-        $sourceList = $this->iterator($this->sourceDirectory);
-        $destList = $this->iterator($this->destinationDirectory);
+        $sourceList = $this->sourceDirectory->iterator();
+        $destList = $this->destinationDirectory->iterator();
 
         /* @var $source FsObject */
         /* @var $dest FsObject */
@@ -196,7 +196,7 @@ class SyncFiles
     protected function iterateOverSourceDir()
     {
         echo "\n";
-        foreach ($this->iterator($this->sourceDirectory) as $fsObject) {
+        foreach ($this->sourceDirectory->iterator() as $fsObject) {
             /* @var $fsObject FsObject */
             $type = str_replace(
                 ['MusicSync\\Service\\', 'MusicSync\\Test\\', ],
@@ -215,22 +215,6 @@ class SyncFiles
         }
 
         return $fsObject->getSize();
-    }
-
-    /**
-     * Recursive directory generator
-     *
-     * @todo Assess whether the end solution needs $level
-     */
-    public function iterator(Directory $directory, $level = 0)
-    {
-        foreach ($directory->getContents() as $fsObject) {
-            /* @var $fsObject FsObject */
-            yield $fsObject;
-            if ($fsObject instanceof Directory) {
-                yield from $this->iterator($fsObject, $level + 1);
-            }
-        }
     }
 
     public function getOperations(): array
