@@ -8,7 +8,7 @@ use MusicSync\Service\SyncFiles;
 use MusicSync\Test\DirectoryTestHarness as TestDirectory;
 use MusicSync\Test\TestCase;
 
-class SyncTest extends TestCase
+class SyncFilesTest extends TestCase
 {
     protected TestFileOperationFactory $factory;
 
