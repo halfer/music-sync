@@ -148,7 +148,14 @@ class SyncFiles
         Generator $sourceList, Generator $destList,
         FsObject $source, FsObject $dest)
     {
-        echo "Different name, need to mark item for copy/deletion\n";
+        echo $source->getName() . ' ' . $dest->getName() . "\n";
+        if ($source->getName() < $dest->getName()) {
+            echo "Missing dest object `{$source->getName()}`, need to add\n";
+            $sourceList->next();
+        } elseif ($source->getName() > $dest->getName()) {
+            echo "Missing source object `{$dest->getName()}`, need to delete\n";
+            $destList->next();
+        }
     }
 
     protected function caseOneExists(
