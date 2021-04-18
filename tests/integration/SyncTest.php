@@ -37,6 +37,19 @@ class SyncTest extends TestCase
         $this->assertEquals($expected, $operations);
     }
 
+    public function testSimpleFileSizeDifferenceCase()
+    {
+        $minorChange = $this->createStructure1();
+        $minorChange->getContents()[2]->getContents()[1]->setSize(2);
+        $operations = $this->runSync($this->createStructure1(), $minorChange);
+
+        // We are specifically interested in one entity
+        $this->assertEquals(
+            ['type' => 'add', 'details' => 'Copy d-c to dest'],
+            $operations[4]
+        );
+    }
+
     public function testSimpleSyncCase()
     {
         $operations = $this->runSync($this->createStructure1(), $this->createStructure2());

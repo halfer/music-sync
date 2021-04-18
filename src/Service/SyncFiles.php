@@ -141,7 +141,10 @@ class SyncFiles
 
     protected function caseFilesDiffer(FsObject $source, FsObject $dest)
     {
-        echo "Copy, size difference\n";
+        $this->pushOperation(
+            'add',
+            "Copy {$source->getName()} to dest"
+        );
     }
 
     protected function caseFileMissing(
