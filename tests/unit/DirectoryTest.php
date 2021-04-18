@@ -99,12 +99,18 @@ class DirectoryTest extends TestCase
         $this->assertTrue($exception, 'Parent setter exception expected');
     }
 
-    /**
-     * Not sure if a circular reference is possible?
-     */
     public function testDetectDirectoryCircularReference()
     {
-        $this->markTestIncomplete();
+        $dir1 = new Directory('a');
+        $dir2 = new Directory('b', $dir1);
+
+        $exception = false;
+        try {
+            $dir1->setParent($dir2);
+        } catch (\Exception $e) {
+            $exception = true;
+        }
+        $this->assertTrue($exception, 'Circular reference not detected');
     }
 
     public function testVerifyDirectoryRelationships()
