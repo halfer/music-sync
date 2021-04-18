@@ -28,10 +28,10 @@ Features
 Todo
 ---
 
-* Start on the Sync command
+* Implement `Directory::verifyDirectoryRelationships` to check all objects have the correct parent
+* Implement `Directory::getCalculatedPath` to get a object's path from its hierarchy
+* See if we need the levels detection in the Sync service (commented out for now)
 * Add from-name and to-name arguments
-* Scan LTR to produce a list of files to copy
-* Scan TRL to produce a list of files to delete
 
 Low priority todo
 ---
@@ -50,3 +50,5 @@ Done
 * Add sorter device to Directory class
 * Implement validateArguments for WriteContentsCache
 * Write a directory cache
+* Start on the Sync command
+* Use generators to recursively explore two folders at once
