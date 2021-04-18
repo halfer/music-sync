@@ -53,6 +53,24 @@ abstract class FsObject
             throw new RuntimeException('A directory cannot be its own parent');
         }
 
+        // Ensure that a parent is not also a child
+        if ($this instanceof Directory) {
+            $this->checkCircularReferences($this, $parent);
+        }
+
         $this->parent = $parent;
+    }
+
+    protected function checkCircularReferences(Directory $dir, Directory $parent)
+    {
+        foreach ($dir->iterator() as $fsObject) {
+            if ($fsObject instanceof Directory) {
+                if ($fsObject === $parent) {
+                    throw new RuntimeException(
+                        'Cannot set dir as parent since it is also a descendant'
+                    );
+                }
+            }
+        }
     }
 }
