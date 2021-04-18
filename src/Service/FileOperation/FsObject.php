@@ -40,7 +40,7 @@ abstract class FsObject
         return $this->path;
     }
 
-    public function getParent(): Directory
+    public function getParent(): ?Directory
     {
         return $this->parent;
     }

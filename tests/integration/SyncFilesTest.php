@@ -152,6 +152,9 @@ class SyncFilesTest extends TestCase
         // Make all file-like objects the same size
         $this->walkStructureAndResetSizes($dir, 1);
 
+        // Just for safety
+        $dir->verifyDirectoryRelationships();
+
         return $dir;
     }
 
@@ -184,6 +187,9 @@ class SyncFilesTest extends TestCase
 
         // Make all file-like objects the same size
         $this->walkStructureAndResetSizes($dir, 1);
+
+        // Just for safety
+        $dir->verifyDirectoryRelationships();
 
         return $dir;
     }
