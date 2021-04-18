@@ -21,17 +21,7 @@ class SyncTest extends TestCase
 
     public function testSimpleSyncNullCase()
     {
-        // Build two identical dir structures in memory
-        $source = $this->createStructure1();
-        $dest = $this->createStructure1();
-
-        // Insert them into the sync system
-        $sut = new SyncFiles($this->factory);
-        $operations = $sut
-            ->setSourceDirectory($source)
-            ->setDestinationDirectory($dest)
-            ->sync()
-            ->getOperations();
+        $operations = $this->runSync($this->createStructure1(), $this->createStructure1());
         $expected = [
             ['type' => 'noop', 'details' => 'a and a identical'],
             ['type' => 'noop', 'details' => 'b and b identical'],
@@ -49,18 +39,7 @@ class SyncTest extends TestCase
 
     public function testSimpleSyncCase()
     {
-        // Build some dir structures in memory
-        $source = $this->createStructure1();
-        $dest = $this->createStructure2();
-
-        // Insert them into the sync system
-        $sut = new SyncFiles($this->factory);
-        $operations = $sut
-            ->setSourceDirectory($source)
-            ->setDestinationDirectory($dest)
-            ->sync()
-            ->getOperations();
-
+        $operations = $this->runSync($this->createStructure1(), $this->createStructure2());
         $expected = [
             ['type' => 'noop', 'details' => 'a and a identical'],
             ['type' => 'add', 'details' => 'Copy b to dest'],
@@ -76,6 +55,24 @@ class SyncTest extends TestCase
             ['type' => 'noop', 'details' => 'f and f identical'],
         ];
         $this->assertEquals($expected, $operations);
+    }
+
+    /**
+     * Runs a sync against two in-memory structures, returns the operations list
+     *
+     * @param array $source
+     * @param array $dest
+     * @return array
+     */
+    protected function runSync(Directory $source, Directory $dest)
+    {
+        $sut = new SyncFiles($this->factory);
+
+        return $sut
+            ->setSourceDirectory($source)
+            ->setDestinationDirectory($dest)
+            ->sync()
+            ->getOperations();
     }
 
     /**
