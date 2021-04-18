@@ -44,4 +44,9 @@ abstract class FsObject
     {
         return $this->parent;
     }
+
+    public function setParent(Directory $parent)
+    {
+        $this->parent = $parent;
+    }
 }

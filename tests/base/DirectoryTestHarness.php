@@ -12,10 +12,15 @@ use MusicSync\Service\FileOperation\FsObject;
  */
 class DirectoryTestHarness extends Directory
 {
-    public function pushObjectPublic(FsObject $object)
+    public function pushObjectPublic(FsObject $fsObject)
     {
-        $this->contents[] = $object;
+        $this->contents[] = $fsObject;
         $this->setPopulated();
+
+        // Point directories to their parent dir where possible
+        if ($fsObject instanceof Directory) {
+            $fsObject->setParent($this);
+        }
     }
 
     public function pushObjects(array $fsObjects)

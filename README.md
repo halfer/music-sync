@@ -28,7 +28,6 @@ Features
 Todo
 ---
 
-* Implement `Directory::verifyDirectoryRelationships` to check all objects have the correct parent
 * Implement `Directory::getCalculatedPath` to get a object's path from its hierarchy
 * See if we need the levels detection in the Sync service (commented out for now)
 * Add from-name and to-name arguments
@@ -40,6 +39,7 @@ Low priority todo
 * Add progress device to recursive Directory populator (DFS)
 * Can we add a BFS progress device too?
 * Add a Symfony bar device to the Generate Listing command
+* Run Directory::verifyDirectoryRelationships to WriteContentsCache
 
 Done
 ---
@@ -52,3 +52,4 @@ Done
 * Write a directory cache
 * Start on the Sync command
 * Use generators to recursively explore two folders at once
+* Implement `Directory::verifyDirectoryRelationships` to check all objects have the correct parent
