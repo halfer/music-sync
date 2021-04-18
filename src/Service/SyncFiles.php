@@ -172,7 +172,21 @@ class SyncFiles
         Generator $sourceList, Generator $destList,
         ?FsObject $source, ?FsObject $dest)
     {
-        throw new \RuntimeException('FIXME, not implemented yet');
+        if ($source) {
+            // Missing dest, so let's copy
+            $this->pushOperation(
+                'add',
+                "Copy {$source->getName()} to dest"
+            );
+            $sourceList->next();
+        } elseif ($dest) {
+            // Missing source, so let's delete
+            $this->pushOperation(
+                'del',
+                "Delete {$dest->getName()} from dest"
+            );
+            $destList->next();
+        }
     }
 
     /**

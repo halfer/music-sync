@@ -77,9 +77,11 @@ class SyncTest extends TestCase
             new File('/home/person/g')
         ]);
         $operations = $this->runSync($source, $this->createStructure2());
-        // @todo Add a test here
-
-        $this->markTestIncomplete();
+        // We are just interested in the last item
+        $this->assertEquals(
+            ['type' => 'add', 'details' => 'Copy g to dest', ],
+            $operations[12]
+        );
     }
 
     public function testSyncCaseDestIsLonger()
@@ -89,9 +91,11 @@ class SyncTest extends TestCase
             new File('/home/person/g')
         ]);
         $operations = $this->runSync($this->createStructure1(), $dest);
-        // @todo Add a test here
-
-        $this->markTestIncomplete();
+        // We are just interested in the last item
+        $this->assertEquals(
+            ['type' => 'del', 'details' => 'Delete g from dest', ],
+            $operations[12]
+        );
     }
 
     /**
