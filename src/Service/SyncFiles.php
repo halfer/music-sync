@@ -148,12 +148,17 @@ class SyncFiles
         Generator $sourceList, Generator $destList,
         FsObject $source, FsObject $dest)
     {
-        echo $source->getName() . ' ' . $dest->getName() . "\n";
         if ($source->getName() < $dest->getName()) {
-            echo "Missing dest object `{$source->getName()}`, need to add\n";
+            $this->pushOperation(
+                'add',
+                "Copy {$source->getName()} to dest"
+            );
             $sourceList->next();
         } elseif ($source->getName() > $dest->getName()) {
-            echo "Missing source object `{$dest->getName()}`, need to delete\n";
+            $this->pushOperation(
+                'del',
+                "Delete {$dest->getName()} from dest"
+            );
             $destList->next();
         }
     }
