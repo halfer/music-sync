@@ -120,8 +120,9 @@ class SyncFiles
                 $source, $dest
             );
         } else {
-            // New unexpected level
-            echo "New level detected\n";
+            throw new \RuntimeException(
+                "FIXME New level detected, needs handler code?"
+            );
         }
     }
 
