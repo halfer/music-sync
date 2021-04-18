@@ -27,7 +27,9 @@ abstract class FsObject
         }
 
         $this->name = $name;
-        $this->parent = $parent;
+        if ($parent) {
+            $this->setParent($parent);
+        }
     }
 
     public function getName(): string
@@ -47,6 +49,10 @@ abstract class FsObject
 
     public function setParent(Directory $parent)
     {
+        if ($parent === $this) {
+            throw new RuntimeException('A directory cannot be its own parent');
+        }
+
         $this->parent = $parent;
     }
 }

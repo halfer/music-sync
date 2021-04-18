@@ -87,6 +87,18 @@ class DirectoryTest extends TestCase
         $this->markTestIncomplete();
     }
 
+    public function testDirectoryCannotBeItsOwnParent()
+    {
+        $exception = false;
+        try {
+            $dir = new Directory('/home/person');
+            $dir->setParent($dir);
+        } catch (\Exception $e) {
+            $exception = true;
+        }
+        $this->assertTrue($exception, 'Parent setter exception expected');
+    }
+
     /**
      * Not sure if a circular reference is possible?
      */
