@@ -243,9 +243,16 @@ class Directory extends FsObject
      */
     public function verifyDirectoryRelationships()
     {
-        throw new RuntimeException(
-            'This method is not yet implemented'
-        );
+        foreach ($this->getContents() as $fsObject) {
+            if ($fsObject instanceof Directory) {
+                if ($fsObject->getParent() !== $this) {
+                    throw new RuntimeException(
+                        'Directory parent is incorrectly set'
+                    );
+                }
+                $fsObject->verifyDirectoryRelationships();
+            }
+        }
     }
 
     public function sort(string $sortType, bool $ascending = true)
