@@ -70,6 +70,30 @@ class SyncTest extends TestCase
         $this->assertEquals($expected, $operations);
     }
 
+    public function testSyncCaseSourceIsLonger()
+    {
+        $source = $this->createStructure1();
+        $source->pushObjects([
+            new File('/home/person/g')
+        ]);
+        $operations = $this->runSync($source, $this->createStructure2());
+        // @todo Add a test here
+
+        $this->markTestIncomplete();
+    }
+
+    public function testSyncCaseDestIsLonger()
+    {
+        $dest = $this->createStructure2();
+        $dest->pushObjects([
+            new File('/home/person/g')
+        ]);
+        $operations = $this->runSync($this->createStructure1(), $dest);
+        // @todo Add a test here
+
+        $this->markTestIncomplete();
+    }
+
     /**
      * Runs a sync against two in-memory structures, returns the operations list
      *

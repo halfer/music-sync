@@ -85,15 +85,9 @@ class SyncFiles
             $dest = $destList->current();
 
             if ($source && $dest) {
-                $this->caseBothExist(
-                    $sourceList, $destList,
-                    $source, $dest
-                );
+                $this->caseBothExist($sourceList, $destList, $source, $dest);
             } elseif ($source || $dest) {
-                echo "Should not happen yet\n";
-            } else {
-                echo "Finish condition\n";
-                break;
+                $this->caseOneExists($sourceList, $destList, $source, $dest);
             }
         }
 
@@ -166,11 +160,19 @@ class SyncFiles
         }
     }
 
+    /**
+     * This caters for the case where one list is longer than the other
+     *
+     * @param Generator $sourceList
+     * @param Generator $destList
+     * @param FsObject|null $source
+     * @param FsObject|null $dest
+     */
     protected function caseOneExists(
         Generator $sourceList, Generator $destList,
         ?FsObject $source, ?FsObject $dest)
     {
-
+        throw new \RuntimeException('FIXME, not implemented yet');
     }
 
     /**
