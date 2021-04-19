@@ -27,8 +27,14 @@ abstract class FsObject
         }
 
         $this->name = $name;
+
+        // We can't check for circular references set, since
+        // at this point, if this is a directory, the content
+        // is not yet populated. So we just set the parent
+        // property, and defer detecting an invalid structure
+        // until the content is set.
         if ($parent) {
-            $this->setParent($parent);
+            $this->parent = $parent;
         }
     }
 
