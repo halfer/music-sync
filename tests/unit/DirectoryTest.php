@@ -82,7 +82,7 @@ class DirectoryTest extends TestCase
         return $dir;
     }
 
-    public function testCalculatedDirectoryPath()
+    public function testCalculatedDirectoryPathChain()
     {
         $dir1 = new DirectoryTestHarness('/home/person');
         $dir2 = new DirectoryTestHarness('one', $dir1);
@@ -93,7 +93,15 @@ class DirectoryTest extends TestCase
             '/home/person/one/two',
             $dir3->getCalculatedPath()
         );
-        $this->markTestIncomplete();
+    }
+
+    public function testCalculatedDirectoryPathSingle()
+    {
+        $dir1 = new DirectoryTestHarness('/home/person');
+        $this->assertEquals(
+            '/home/person',
+            $dir1->getCalculatedPath()
+        );
     }
 
     public function testDirectoryCannotBeItsOwnParent()

@@ -209,12 +209,12 @@ class Directory extends FsObject
         $i = 0;
         $loopLimit = 100;
 
+        $oldParent = $this;
         $parent = $this->getParent();
         $path = $this->getName();
         while ($parent) {
             // Prepend the dir name to the path
             $path = $parent->getName() . DIRECTORY_SEPARATOR . $path;
-#echo "(Inside loop) Path: $path\n";
 
             // Bork if too many loops
             $i++;
@@ -232,17 +232,15 @@ class Directory extends FsObject
             $parent = $parent->getParent();
 
             // If we are at the end, add the last parent
-            if (!$parent) {
-                $path = $oldParent->getPath() . DIRECTORY_SEPARATOR . $path;
-            }
+            #if (!$parent) {
+            #    $path = $oldParent->getPath() . DIRECTORY_SEPARATOR . $path;
+            #}
         }
 
-        // Now prepend the topmost path
-#        $path = $path ?
-#            $this->getPath() . DIRECTORY_SEPARATOR . $path :
-#            $this->getPath();
-#echo "(End) Full path: $path\n";
-#echo "Path: " . $oldParent->getPath() . "\n";
+        // @todo Hmm, oldParent will always exist
+        if ($oldParent) {
+            $path = $oldParent->getPath() . DIRECTORY_SEPARATOR . $path;
+        }
 
         return $path;
     }
