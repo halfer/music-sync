@@ -104,6 +104,15 @@ class DirectoryTest extends TestCase
         );
     }
 
+    public function testCalculatedDirectoryPathJustFile()
+    {
+        $dir1 = new DirectoryTestHarness('dir');
+        $this->assertEquals(
+            'dir',
+            $dir1->getCalculatedPath()
+        );
+    }
+
     public function testDirectoryCannotBeItsOwnParent()
     {
         $exception = false;

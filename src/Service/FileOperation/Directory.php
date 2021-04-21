@@ -230,15 +230,10 @@ class Directory extends FsObject
             // Move one level up
             $oldParent = $parent;
             $parent = $parent->getParent();
-
-            // If we are at the end, add the last parent
-            #if (!$parent) {
-            #    $path = $oldParent->getPath() . DIRECTORY_SEPARATOR . $path;
-            #}
         }
 
-        // @todo Hmm, oldParent will always exist
-        if ($oldParent) {
+        // oldParent might not have a path
+        if ($oldParent->getPath()) {
             $path = $oldParent->getPath() . DIRECTORY_SEPARATOR . $path;
         }
 
