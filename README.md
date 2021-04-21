@@ -28,8 +28,9 @@ Features
 Todo
 ---
 
-* Implement `Directory::getCalculatedPath` to get a object's path from its hierarchy
-* See if we need the levels detection in the Sync service (commented out for now)
+* See if we need level detection in the SyncFiles service (commented out for now)
+* Does the system cope with symlinks of folders?
+* Get SyncFiles to do directory creation and file copy
 * Add from-name and to-name arguments
 
 Low priority todo
@@ -50,6 +51,7 @@ Done
 * Add sorter device to Directory class
 * Implement validateArguments for WriteContentsCache
 * Write a directory cache
-* Start on the Sync command
+* Start on the SyncFiles command
 * Use generators to recursively explore two folders at once
 * Implement `Directory::verifyDirectoryRelationships` to check all objects have the correct parent
+* Implement `Directory::getCalculatedPath` to get a object's path from its hierarchy
