@@ -84,6 +84,15 @@ class DirectoryTest extends TestCase
 
     public function testCalculatedDirectoryPath()
     {
+        $dir1 = new DirectoryTestHarness('/home/person');
+        $dir2 = new DirectoryTestHarness('one', $dir1);
+        $dir3 = new DirectoryTestHarness('two', $dir2);
+
+        #echo "Path of top level: " . $dir1->getPath() . "\n";
+        $this->assertEquals(
+            '/home/person/one/two',
+            $dir3->getCalculatedPath()
+        );
         $this->markTestIncomplete();
     }
 

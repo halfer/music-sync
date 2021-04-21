@@ -33,9 +33,7 @@ abstract class FsObject
         // is not yet populated. So we just set the parent
         // property, and defer detecting an invalid structure
         // until the content is set.
-        if ($parent) {
-            $this->parent = $parent;
-        }
+        $this->parent = $parent;
     }
 
     public function getName(): string
